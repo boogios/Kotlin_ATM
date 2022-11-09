@@ -3,17 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../layout/custom_preview.xml" value="0.14958033573141488" />
-        <entry key="app/src/main/res/drawable/btn_gray.xml" value="0.2495" />
-        <entry key="app/src/main/res/drawable/btn_green.xml" value="0.2495" />
-        <entry key="app/src/main/res/drawable/btn_style.xml" value="0.2495" />
-        <entry key="app/src/main/res/drawable/taxi_background.xml" value="0.2495" />
-        <entry key="app/src/main/res/drawable/txt_basic.xml" value="0.2495" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.4135460252028246" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.32459564208984376" />
-        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.37191162109375" />
-        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2495" />
-        <entry key="app/src/main/res/mipmap-anydpi-v26/taxi_round.xml" value="0.2495" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.20885416666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.396875" />
+        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2976898193359375" />
       </map>
     </option>
   </component>
