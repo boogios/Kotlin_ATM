@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "910637342332",
+    "project_id": "around-taxi-member",
+    "storage_bucket": "around-taxi-member.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910637342332:android:3c15e792fa5a9746e673f9",
+        "android_client_info": {
+          "package_name": "com.example.atm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910637342332-ocrodemt67ocml97i1nsk1h6n46lgphm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYlFFAcvsHYi61jhLw7broITC_WLeX_Mg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910637342332-ocrodemt67ocml97i1nsk1h6n46lgphm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
