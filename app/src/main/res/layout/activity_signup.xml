@@ -42,12 +42,12 @@
         android:background="@drawable/txt_basic"
         android:ems="10"
         android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
+        app:layout_constraintEnd_toStartOf="@+id/btn_signupIDCheck"
         app:layout_constraintStart_toStartOf="@+id/btn_backToLogin"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button6"
+        android:id="@+id/btn_signupIDCheck"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginEnd="20dp"
@@ -69,7 +69,7 @@
         android:background="@drawable/txt_basic"
         android:ems="10"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/button6"
+        app:layout_constraintEnd_toEndOf="@+id/btn_signupIDCheck"
         app:layout_constraintStart_toStartOf="@+id/signupEmail"
         app:layout_constraintTop_toBottomOf="@+id/signupEmail" />
 
@@ -87,54 +87,69 @@
         app:layout_constraintStart_toStartOf="@+id/signupPassword"
         app:layout_constraintTop_toBottomOf="@+id/signupPassword" />
 
-    <com.google.android.material.chip.ChipGroup
+    <TextView
+        android:id="@+id/txtPasswordCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Password is not correct.. :("
+        android:textColor="@color/sub_color"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/signupPasswordCheck"
+        app:layout_constraintTop_toBottomOf="@+id/signupPasswordCheck" />
+
+    <RadioGroup
         android:id="@+id/chipGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:singleSelection="true"
-        app:layout_constraintEnd_toEndOf="@+id/button6"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/btn_signupIDCheck"
         app:layout_constraintStart_toStartOf="@+id/signupPasswordCheck"
-        app:layout_constraintTop_toBottomOf="@+id/signupPasswordCheck">
+        app:layout_constraintTop_toBottomOf="@+id/txtPasswordCheck"
+        app:singleSelection="true">
 
-        <com.google.android.material.chip.Chip
+        <RadioButton
             android:id="@+id/chip"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Male"
-            />
+            android:text="Male" />
 
-        <com.google.android.material.chip.Chip
+        <RadioButton
             android:id="@+id/chip2"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Female"
-            />
-    </com.google.android.material.chip.ChipGroup>
+            android:text="Female" />
+    </RadioGroup>
 
     <EditText
-        android:id="@+id/editTextTextPersonName5"
+        android:id="@+id/signupNickname"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/txt_basic"
         android:ems="10"
+        android:hint="Nickname"
+        android:paddingStart="15dp"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/signupEmail"
         app:layout_constraintStart_toStartOf="@+id/chipGroup"
         app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button7"
+        android:id="@+id/btn_signupNicknameCheck"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:text="중복확인"
         android:textColor="@color/white"
         android:background="@drawable/btn_green"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName5"
+        app:layout_constraintBottom_toBottomOf="@+id/signupNickname"
         app:layout_constraintEnd_toEndOf="@+id/chipGroup"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName5" />
+        app:layout_constraintTop_toTopOf="@+id/signupNickname" />
 
     <Button
         android:id="@+id/btn_createAccount"
@@ -144,7 +159,7 @@
         android:text="Sign Up"
         android:textColor="@color/white"
         android:background="@drawable/btn_green"
-        app:layout_constraintEnd_toEndOf="@+id/button7"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName5"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName5" />
+        app:layout_constraintEnd_toEndOf="@+id/btn_signupNicknameCheck"
+        app:layout_constraintStart_toStartOf="@+id/signupNickname"
+        app:layout_constraintTop_toBottomOf="@+id/signupNickname" />
 </androidx.constraintlayout.widget.ConstraintLayout>
