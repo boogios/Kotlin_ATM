@@ -113,13 +113,13 @@
         app:singleSelection="true">
 
         <RadioButton
-            android:id="@+id/chip"
+            android:id="@+id/signupMale"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Male" />
 
         <RadioButton
-            android:id="@+id/chip2"
+            android:id="@+id/signupFemale"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Female" />

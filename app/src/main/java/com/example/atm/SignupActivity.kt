@@ -6,9 +6,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.view.isInvisible
 import com.example.atm.databinding.ActivitySignupBinding
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -20,13 +24,19 @@ class SignupActivity : AppCompatActivity() {
     // FirebaseAuth
     private lateinit var auth: FirebaseAuth
 
+    // FirebaseAnalytics
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // FirebaseAuth
+        // FirebaseAuth 초기화
         auth = FirebaseAuth.getInstance()
+
+        // FirebaseAnalytics 초기화
+        firebaseAnalytics = Firebase.analytics
 
         // Password Check
         checkCorrectPassword()
@@ -36,7 +46,12 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.signupEmail.text.toString()
             val password = binding.signupPassword.text.toString()
             val passwordCheck = binding.signupPasswordCheck.text.toString()
-            createAccount(email, password, passwordCheck)
+            val male = binding.signupMale
+            val female = binding.signupFemale
+            val nickname = binding.signupNickname.text.toString()
+
+            checkMaleOrFemale(male, female)
+            createAccount(email, password, passwordCheck, nickname)
         }
 
         // 뒤로가기 버튼
@@ -48,7 +63,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     // 계정 생성 함수
-    private fun createAccount(id: String, password: String, passwordCheck: String) {
+    private fun createAccount(id: String, password: String, passwordCheck: String, nickname: String) {
         if (id.isNotEmpty() && password.isNotEmpty()) {
             if (password.length < 6) {
                 Toast.makeText(this, "비밀번호는 6글자 이상 이여야 합니다", Toast.LENGTH_LONG).show()
@@ -56,17 +71,26 @@ class SignupActivity : AppCompatActivity() {
                 if (password != passwordCheck) {
                     Toast.makeText(this, "비밀번호가 일치하지 않습니다", Toast.LENGTH_LONG).show()
                 } else {
-                    auth?.createUserWithEmailAndPassword(id, password)
-                        ?.addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_LONG).show()
-                                finish()
-                            } else {
-                                Toast.makeText(this, "계정 생성 실패", Toast.LENGTH_LONG).show()
+                    if (nickname.isEmpty()) {
+                        Toast.makeText(this, "닉네임을 입력해주세요", Toast.LENGTH_LONG).show()
+                    } else {
+                        auth?.createUserWithEmailAndPassword(id, password)
+                            ?.addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    firebaseAnalytics.setUserProperty("nickname", nickname)
+                                    Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_LONG).show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(this, "계정 생성 실패", Toast.LENGTH_LONG).show()
+                                    // 에러 체크
+                                    // Log.d("ITM", it.exception.toString())
+                                }
                             }
                     }
                 }
             }
+        } else {
+            Toast.makeText(this, "ID를 입력해주세요", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -95,6 +119,17 @@ class SignupActivity : AppCompatActivity() {
             // 문자 변경할 때마다 호출
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
         })
+    }
+
+    // 성별 체크 함수
+    private fun checkMaleOrFemale(male: RadioButton, female: RadioButton) {
+        if (male.isChecked) {
+            firebaseAnalytics.setUserProperty("sex", male.text.toString())
+        } else if (female.isChecked) {
+            firebaseAnalytics.setUserProperty("sex", female.text.toString())
+        } else {
+            Toast.makeText(this, "성별을 골라주세요", Toast.LENGTH_LONG).show()
+        }
     }
 
 }
