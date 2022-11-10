@@ -1,10 +1,11 @@
 package com.example.atm
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -75,6 +76,9 @@ class Home : Fragment() {
         dataInitialize()
         val layoutManager = LinearLayoutManager(context)
         recyclerView = view.findViewById(R.id.recycler)
+        // Divider 추가
+        val dividerItemDecoration = DividerItemDecoration(recyclerView.context,layoutManager.orientation)
+        recyclerView.addItemDecoration(dividerItemDecoration)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
         adapter = MyAdapter(joinArrayList)
