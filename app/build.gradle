@@ -19,6 +19,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "KAKAO_MAP_REST_API_KEY",properties['kakao.map.rest.api.key']
         manifestPlaceholders = [kakaoMapApiKey:kakaoMapApiKey]    }
 
     buildTypes {
