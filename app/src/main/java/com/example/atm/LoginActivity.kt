@@ -7,8 +7,6 @@ import android.widget.Toast
 import com.example.atm.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
 
@@ -25,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
         // FirebaseAuth
         auth = FirebaseAuth.getInstance()
 
+        // 회원가입 창으로 이동
         binding.btnSignup.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
         }
@@ -44,8 +43,8 @@ class LoginActivity : AppCompatActivity() {
     private fun logIn(id: String, password: String) {
         if (id.isNotEmpty() && password.isNotEmpty()) {
             auth?.signInWithEmailAndPassword(id, password)
-                ?.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
+                ?.addOnCompleteListener(this) {
+                    if (it.isSuccessful) {
                         Toast.makeText(baseContext, "로그인 성공", Toast.LENGTH_LONG).show()
                         goToMainPage(auth?.currentUser)
                     } else {
