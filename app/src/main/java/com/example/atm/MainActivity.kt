@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.home -> replaceFragment(Home())
                 R.id.chat -> replaceFragment(Chat())
-                R.id.settings -> replaceFragment(Settings())
+                R.id.settings -> replaceFragment(SettingFragment())
                 else -> {
 
                 }
