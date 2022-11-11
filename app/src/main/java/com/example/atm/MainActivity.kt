@@ -13,12 +13,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(Home())
+        replaceFragment(HomeFragment())
 
         binding.bottomNavigationView2.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.home -> replaceFragment(Home())
-                R.id.chat -> replaceFragment(Chat())
+                R.id.home -> replaceFragment(HomeFragment())
+                R.id.chat -> replaceFragment(ChatFragment())
                 R.id.settings -> replaceFragment(SettingFragment())
                 else -> {
 
