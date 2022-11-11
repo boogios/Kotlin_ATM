@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ATM</string>
+    <string name="originTitle">출발지</string>
+    <string name="destinationTitle">도착지</string>
+    <string name="searchDestination">TextView</string>
+    <string name="searchBtn">Search!</string>
+    <string name="searchOrigin">TextView</string>
+    <string name="todo">TODO</string>
 </resources>
