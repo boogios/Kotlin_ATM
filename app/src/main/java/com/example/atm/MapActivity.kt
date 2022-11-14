@@ -41,7 +41,7 @@ class MapActivity : AppCompatActivity() {
         // 리스트 아이템 클릭 시 해당 위치로 이동
         listAdapter.setItemClickListener(object : ListAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                Log.d("LocalSearch", "listItem: ${listItems[position]}")
+                Log.d("LocalSearch", "listItem: ${listItems[position].toString()}")
                 val mapPoint =
                     MapPoint.mapPointWithGeoCoord(listItems[position].y, listItems[position].x)
                 binding.mapView.setMapCenterPointAndZoomLevel(mapPoint, 1, true)
