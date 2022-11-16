@@ -24,23 +24,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var numberOfMember: Array<Int>
     private lateinit var originLauncher: ActivityResultLauncher<Intent>
     private lateinit var destinationLauncher: ActivityResultLauncher<Intent>
+    private var mySearch = Search()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         originLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.data != null) binding.searchOrigin.text = it.data!!.getStringExtra("name")
+                if (it.data != null) {
+                    binding.searchOrigin.text = it.data!!.getStringExtra("name")
+                    mySearch.apply {
+                        originName = it.data!!.getStringExtra("name")!!
+                        originRoad = it.data!!.getStringExtra("road")!!
+                        originAddress = it.data!!.getStringExtra("address")!!
+                        originX = it.data!!.getStringExtra("x")!!.toDouble()
+                        originY = it.data!!.getStringExtra("y")!!.toDouble()
+                    }
+                }
                 Log.d("LocalSearch", "${it.data}")
-                Log.d("LocalSearch", "${it.data?.getStringExtra("name")}")
+                Log.d("LocalSearch", "${mySearch}")
             }
 
         destinationLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.data != null) binding.searchDestination.text =
-                    it.data!!.getStringExtra("name")
+                if (it.data != null) {
+                    binding.searchDestination.text = it.data!!.getStringExtra("name")
+                    mySearch.apply {
+                        destinationName = it.data!!.getStringExtra("name")!!
+                        destinationRoad = it.data!!.getStringExtra("road")!!
+                        destinationAddress = it.data!!.getStringExtra("address")!!
+                        destinationX = it.data!!.getStringExtra("x")!!.toDouble()
+                        destinationY = it.data!!.getStringExtra("y")!!.toDouble()
+                    }
+                }
                 Log.d("LocalSearch", "${it.data}")
-                Log.d("LocalSearch", "${it.data?.getStringExtra("name")}")
+                Log.d("LocalSearch", "${mySearch}")
             }
 
         val intent = Intent(activity, MapActivity::class.java)
@@ -50,8 +68,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         binding.searchDestination.setOnClickListener {
             destinationLauncher.launch(intent)
         }
+        binding.closeButton.setOnClickListener {
+            binding.searchOrigin.text=""
+            binding.searchDestination.text=""
+            mySearch = Search()
+        }
 
         dataInitialize()
+
         val layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recycler
         // Divider 추가
