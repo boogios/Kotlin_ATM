@@ -48,6 +48,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="28dp"
         android:text="@string/searchOrigin"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,6 +59,7 @@
         android:layout_marginStart="41dp"
         android:layout_marginTop="24dp"
         android:text="@string/searchDestination"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/destinationTitle"
         app:layout_constraintTop_toBottomOf="@+id/searchOrigin" />
 
