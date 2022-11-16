@@ -1,10 +1,10 @@
 package com.example.atm
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.atm.databinding.ActivityMapBinding
 import net.daum.mf.map.api.MapPOIItem
@@ -15,12 +15,16 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private val listItems = arrayListOf<ListLayout>() // 리사이클러 뷰 아이템
     private val listAdapter = ListAdapter(listItems) // 리사이클러 뷰 어댑터
     private var pageNumber = 1 // 검색 페이지 번호
     private var keyword = "" // 검색 키워드
+
+    private var selectedPosition = -1
+    private var selectedPageNumber = -1
 
     companion object {
         const val BASE_URL = "https://dapi.kakao.com/"
@@ -41,7 +45,31 @@ class MapActivity : AppCompatActivity() {
         // 리스트 아이템 클릭 시 해당 위치로 이동
         listAdapter.setItemClickListener(object : ListAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                Log.d("LocalSearch", "listItem: ${listItems[position].toString()}")
+                if (selectedPosition == position && selectedPageNumber == pageNumber) {
+                    Log.d(
+                        "LocalSearch",
+                        "name: ${listItems[position].name}"
+                    )
+
+                    intent.putExtra("name", listItems[position].name)
+                    intent.putExtra("road", listItems[position].road)
+                    intent.putExtra("address", listItems[position].address)
+                    intent.putExtra("x", listItems[position].x.toString())
+                    intent.putExtra("y", listItems[position].y.toString())
+                    setResult(RESULT_OK, intent)
+                    Log.d(
+                        "LocalSearch",
+                        "intent name: ${intent.getStringExtra("name")}}"
+                    )
+                    finish()
+                } else {
+                    selectedPosition = position
+                    selectedPageNumber = pageNumber
+                }
+                Log.d(
+                    "LocalSearch",
+                    "position,pageNumber: ${position}, ${pageNumber} listItem: ${listItems[position]}"
+                )
                 val mapPoint =
                     MapPoint.mapPointWithGeoCoord(listItems[position].y, listItems[position].x)
                 binding.mapView.setMapCenterPointAndZoomLevel(mapPoint, 1, true)
