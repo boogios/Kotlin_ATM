@@ -1,7 +1,11 @@
 package com.example.atm
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,19 +17,46 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var recyclerView: RecyclerView
     private lateinit var joinArrayList: ArrayList<Join>
 
-    lateinit var imageId : Array<Int>
+    lateinit var imageId: Array<Int>
     lateinit var nickname: Array<String>
     lateinit var origin: Array<String>
     lateinit var destination: Array<String>
     lateinit var numberOfMember: Array<Int>
+    lateinit var originLauncher: ActivityResultLauncher<Intent>
+    lateinit var destinationLauncher: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        originLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.data != null) binding.searchOrigin.text = it.data!!.getStringExtra("name")
+                Log.d("LocalSearch", "${it.data}")
+                Log.d("LocalSearch", "${it.data?.getStringExtra("name")}")
+            }
+
+        destinationLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.data != null) binding.searchDestination.text =
+                    it.data!!.getStringExtra("name")
+                Log.d("LocalSearch", "${it.data}")
+                Log.d("LocalSearch", "${it.data?.getStringExtra("name")}")
+            }
+
+        val intent = Intent(activity, MapActivity::class.java)
+        binding.searchOrigin.setOnClickListener {
+            originLauncher.launch(intent)
+        }
+        binding.searchDestination.setOnClickListener {
+            destinationLauncher.launch(intent)
+        }
+
         dataInitialize()
         val layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recycler
         // Divider 추가
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context,layoutManager.orientation)
+        val dividerItemDecoration =
+            DividerItemDecoration(recyclerView.context, layoutManager.orientation)
         recyclerView.addItemDecoration(dividerItemDecoration)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
