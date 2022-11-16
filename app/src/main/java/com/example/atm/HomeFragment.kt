@@ -17,13 +17,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var recyclerView: RecyclerView
     private lateinit var joinArrayList: ArrayList<Join>
 
-    lateinit var imageId: Array<Int>
-    lateinit var nickname: Array<String>
-    lateinit var origin: Array<String>
-    lateinit var destination: Array<String>
-    lateinit var numberOfMember: Array<Int>
-    lateinit var originLauncher: ActivityResultLauncher<Intent>
-    lateinit var destinationLauncher: ActivityResultLauncher<Intent>
+    private lateinit var imageId: Array<Int>
+    private lateinit var nickname: Array<String>
+    private lateinit var origin: Array<String>
+    private lateinit var destination: Array<String>
+    private lateinit var numberOfMember: Array<Int>
+    private lateinit var originLauncher: ActivityResultLauncher<Intent>
+    private lateinit var destinationLauncher: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
