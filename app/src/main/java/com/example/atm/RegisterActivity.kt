@@ -13,8 +13,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var originLauncher: ActivityResultLauncher<Intent>
     private lateinit var destinationLauncher: ActivityResultLauncher<Intent>
     private var mySearch = Search()
-    private var currentCount:Int = 1
-    private var totalCount: Int = 0
+    private var currentNumberPeople: Int = 1
+    private var requestNumberPeople: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,18 +81,28 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerPost() {
-        TODO("Not yet implemented")
+        if (mySearch.originName.equals(null) or mySearch.destinationName.equals(null)) {
+            return
+        }
+        val myPost = Post(
+            search = mySearch,
+            currentNumberPeople = currentNumberPeople,
+            requestNumberPeople = requestNumberPeople,
+            comment = binding.comment.toString()
+        )
+        Log.d("registerSearch", "$myPost")
+
     }
 
     private fun plusCount() {
-        if (totalCount >= 4) return
-        totalCount += 1
-        binding.numOfPeople.setText(totalCount.toString() + "명")
+        if (requestNumberPeople >= 4) return
+        requestNumberPeople += 1
+        binding.numOfPeople.setText(requestNumberPeople.toString() + "명")
     }
 
     private fun minusCount() {
-        if (totalCount <= 0) return
-        totalCount -= 1
-        binding.numOfPeople.setText(totalCount.toString() + "명")
+        if (requestNumberPeople <= 0) return
+        requestNumberPeople -= 1
+        binding.numOfPeople.setText(requestNumberPeople.toString() + "명")
     }
 }
