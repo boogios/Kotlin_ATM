@@ -4,16 +4,12 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.common.data.DataHolder
-import java.text.FieldPosition
 
 class ChatAdapter(
-    val currentUser: String,
+    val nickName: String,
     val itemList: ArrayList<ChatLayout>
 ): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
@@ -28,7 +24,7 @@ class ChatAdapter(
 
     override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
         // 현재 닉네임과 글쓴이의 닉네임이 같을 경우 배경을 노란색으로 변경
-        if (currentUser == itemList[position].nickname) {
+        if (nickName == itemList[position].nickname) {
             holder.card.setCardBackgroundColor(Color.parseColor("#FFF176"))
         }
         holder.nickname.text = itemList[position].nickname
@@ -38,7 +34,7 @@ class ChatAdapter(
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val card: CardView = itemView.findViewById(R.id.chat_view)
+        val card: CardView = itemView.findViewById(R.id.chatCardView)
         val nickname: TextView = itemView.findViewById(R.id.chatNickname)
         val contents: TextView = itemView.findViewById(R.id.chatMessage)
         // val time: TextView = itemView.findViewById(R.id.chatTime)
