@@ -95,11 +95,11 @@
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="124dp"
+        android:layout_height="19dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="44dp"
-        android:text="모집인원"
+        android:layout_marginTop="40dp"
+        android:text="모집인원(본인포함)"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
