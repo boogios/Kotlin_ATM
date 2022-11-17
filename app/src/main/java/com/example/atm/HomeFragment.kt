@@ -73,6 +73,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             binding.searchDestination.text=""
             mySearch = Search()
         }
+        binding.registerBtn.setOnClickListener {
+            startActivity(Intent(activity, RegisterActivity::class.java))
+        }
 
         dataInitialize()
 
