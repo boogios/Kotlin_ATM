@@ -55,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
                         goToMainPage(auth?.currentUser)
                     } else {
                         Toast.makeText(baseContext, "로그인 실패", Toast.LENGTH_LONG).show()
+                        Log.d("ITM", it.exception.toString())
                     }
                 }
         }

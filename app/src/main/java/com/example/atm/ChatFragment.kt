@@ -45,7 +45,6 @@ class ChatFragment : Fragment() {
         arguments?.let {
             currentUser = it.getString("nickname").toString()
         }
-        Log.d("Chat", currentUser)
     }
 
     override fun onCreateView(
@@ -66,6 +65,7 @@ class ChatFragment : Fragment() {
         // 채팅창이 공백일 경우 -> 버튼 비활성화
         binding.editTextMessage.addTextChangedListener {
             binding.btnSendMessage.isEnabled = it.toString() != ""
+            Toast.makeText(context, "텍스트를 입력하세요", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnSendMessage.setOnClickListener {
@@ -74,12 +74,15 @@ class ChatFragment : Fragment() {
                 "contents" to binding.editTextMessage.text.toString()
             )
 
+            Toast.makeText(context, "클릭함", Toast.LENGTH_SHORT).show()
+
             chatDB.collection("Chat").add(data)
                 .addOnSuccessListener {
                     binding.editTextMessage.text.clear()
                 }
-                .addOnFailureListener {
+                .addOnFailureListener { e ->
                     Toast.makeText(context, "전송 실패", Toast.LENGTH_LONG).show()
+                    Log.d("ITM", "$e")
                 }
         }
 
