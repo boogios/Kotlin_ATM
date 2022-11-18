@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.atm.databinding.ActivityRegisterBinding
@@ -82,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun registerPost() {
         if (mySearch.originName.equals(null) or mySearch.destinationName.equals(null)) {
-            return
+            return Toast.makeText(baseContext, "출발지 또는 도착지를 입력해주세요!", Toast.LENGTH_LONG).show()
         }
         val myPost = Post(
             search = mySearch,
@@ -90,7 +91,9 @@ class RegisterActivity : AppCompatActivity() {
             requestNumberPeople = requestNumberPeople,
             comment = binding.comment.toString()
         )
+        Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
         Log.d("registerSearch", "$myPost")
+        finish()
 
     }
 
