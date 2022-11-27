@@ -1,1 +1,5 @@
 /build
+/libs/libDaumMapAndroid.jar
+/src/main/jniLibs/arm64-v8a/libDaumMapEngineApi.so
+/src/main/jniLibs/armeabi/libDaumMapEngineApi.so
+/src/main/jniLibs/armeabi-v7a/libDaumMapEngineApi.so
