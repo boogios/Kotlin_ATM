@@ -3,13 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.18854916067146282" />
+        <entry key="app/src/main/res/drawable/txt_basic.xml" value="0.201" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.4280283610026042" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.396875" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.35449371337890623" />
+        <entry key="app/src/main/res/layout/activity_map.xml" value="0.19722222222222222" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.2976898193359375" />
         <entry key="app/src/main/res/layout/fragment_base.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.396875" />
+        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.29621734619140627" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.396875" />
+        <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.396875" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.396875" />
+        <entry key="app/src/main/res/layout/item_chat.xml" value="0.3385269165039062" />
+        <entry key="app/src/main/res/layout/list_item.xml" value="0.2894149780273438" />
+        <entry key="app/src/main/res/layout/list_layout.xml" value="0.2351851851851852" />
       </map>
     </option>
   </component>

@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.atm.databinding.ActivityRegisterBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -17,11 +20,21 @@ class RegisterActivity : AppCompatActivity() {
     private var currentNumberPeople: Int = 1
     private var requestNumberPeople: Int = 0
 
+    // FirebaseAuth
+    private lateinit var auth: FirebaseAuth
+
+    // Firebase Realtime DB
+    private lateinit var databaseRef: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // FirebaseAuth
+        auth = FirebaseAuth.getInstance()
+        databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
 
         // launcher
         originLauncher =
@@ -82,6 +95,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerPost() {
+
+        val currentUser = auth.currentUser
         if (mySearch.originName.equals(null) or mySearch.destinationName.equals(null)) {
             return Toast.makeText(baseContext, "출발지 또는 도착지를 입력해주세요!", Toast.LENGTH_LONG).show()
         }
@@ -89,11 +104,18 @@ class RegisterActivity : AppCompatActivity() {
             search = mySearch,
             currentNumberPeople = currentNumberPeople,
             requestNumberPeople = requestNumberPeople,
-            comment = binding.comment.toString()
+            comment = binding.comment.text.toString()
         )
-        Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
         Log.d("registerSearch", "$myPost")
-        finish()
+        Log.d("registerSearch", "${myPost.comment}")
+
+
+        if (currentUser != null) {
+            databaseRef.child("Posting").child(currentUser.uid).setValue(myPost)
+            Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
+            Log.d("registerSearch", "$myPost")
+            finish()
+        }
 
     }
 

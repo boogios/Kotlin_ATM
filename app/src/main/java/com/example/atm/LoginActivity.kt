@@ -3,10 +3,12 @@ package com.example.atm
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.example.atm.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -15,6 +17,9 @@ class LoginActivity : AppCompatActivity() {
     // FirebaseAuth
     private lateinit var auth: FirebaseAuth
 
+    // Firebase Realtime DB
+    private lateinit var databaseRef: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -22,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
 
         // FirebaseAuth
         auth = FirebaseAuth.getInstance()
+        databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
 
         // 회원가입 창으로 이동
         binding.btnSignup.setOnClickListener {
@@ -45,10 +51,11 @@ class LoginActivity : AppCompatActivity() {
             auth?.signInWithEmailAndPassword(id, password)
                 ?.addOnCompleteListener(this) {
                     if (it.isSuccessful) {
-                        Toast.makeText(baseContext, "로그인 성공", Toast.LENGTH_LONG).show()
+                        getUserNickname(databaseRef)
                         goToMainPage(auth?.currentUser)
                     } else {
                         Toast.makeText(baseContext, "로그인 실패", Toast.LENGTH_LONG).show()
+                        Log.d("ITM", it.exception.toString())
                     }
                 }
         }
@@ -60,6 +67,21 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+    }
+
+    // User의 Nickname 가져오기
+    private fun getUserNickname(Ref: DatabaseReference) {
+        Ref.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val nickname = snapshot.child("UserAccount").child(auth.currentUser?.uid.toString()).child("nickName").getValue().toString()
+                Log.d("ITM", nickname)
+                Toast.makeText(baseContext, "로그인 성공 ${nickname}", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 읽어오기 실패했을 때
+            }
+        })
     }
 
 }
