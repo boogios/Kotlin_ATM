@@ -98,6 +98,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         recyclerView.setHasFixedSize(true)
         adapter = MyAdapter(joinArrayList)
         recyclerView.adapter = adapter
+
+        // 리스트 아이템 클릭 시
+        adapter.setItemClickListener(object : MyAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                Log.d(
+                    "db",
+                    "View: $v, Position: $position"
+                )
+            }
+
+        })
     }
 
     private fun getUserData() {
