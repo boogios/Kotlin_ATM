@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.atm.databinding.FragmentHomeBinding
+import com.google.firebase.database.DatabaseReference
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
@@ -21,7 +22,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var nickname: Array<String>
     private lateinit var origin: Array<String>
     private lateinit var destination: Array<String>
-    private lateinit var numberOfMember: Array<Int>
+    private lateinit var currentNumberPeople: Array<Int>
+    private lateinit var requestNumberPeople: Array<Int>
     private lateinit var originLauncher: ActivityResultLauncher<Intent>
     private lateinit var destinationLauncher: ActivityResultLauncher<Intent>
     private var mySearch = Search()
@@ -123,16 +125,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             "서울과학기술대학교 정문",
             "서울과학기술대학교 정문",
         )
-        numberOfMember = arrayOf(
+        currentNumberPeople = arrayOf(
             1,
             1,
             1,
             1,
             1,
         )
+        requestNumberPeople= arrayOf(
+            4,
+            4,
+            4,
+            4,
+            4,
+        )
 
         for (i in imageId.indices) {
-            val join = Join(imageId[i], nickname[i], origin[i], destination[i], numberOfMember[i])
+            val join = Join(
+                imageId[i],
+                nickname[i],
+                origin[i],
+                destination[i],
+                currentNumberPeople[i],
+                requestNumberPeople[i]
+            )
+
             joinArrayList.add(join)
 
         }

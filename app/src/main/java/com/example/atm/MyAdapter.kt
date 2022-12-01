@@ -1,5 +1,6 @@
 package com.example.atm
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +18,14 @@ class MyAdapter(private val joinList: ArrayList<Join>) : RecyclerView.Adapter<My
         return MyViewHolder(itemView)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = joinList[position]
         holder.profileImage.setImageResource(currentItem.profileImage)
         holder.nickname.text = currentItem.nickname
         holder.origin.text = currentItem.origin
         holder.destination.text = currentItem.destination
-        holder.numberOfMember.text = currentItem.numberOfMember.toString()
+        holder.numberOfMember.text = currentItem.currentNumberPeople.toString() +" / " +currentItem.requestNumberPeople.toString()
     }
 
     override fun getItemCount(): Int {

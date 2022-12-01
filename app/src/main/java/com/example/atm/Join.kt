@@ -5,6 +5,7 @@ data class Join(
     var nickname: String,
     var origin: String,
     var destination: String,
-    var numberOfMember: Int
+    var currentNumberPeople: Int,
+    var requestNumberPeople: Int,
 )
 
