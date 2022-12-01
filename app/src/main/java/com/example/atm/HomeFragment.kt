@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.atm.databinding.FragmentHomeBinding
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
+    private lateinit var dbref: DatabaseReference
 
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
@@ -71,16 +72,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             destinationLauncher.launch(intent)
         }
         binding.closeButton.setOnClickListener {
-            binding.searchOrigin.text=""
-            binding.searchDestination.text=""
+            binding.searchOrigin.text = ""
+            binding.searchDestination.text = ""
             mySearch = Search()
         }
         binding.registerBtn.setOnClickListener {
             startActivity(Intent(activity, RegisterActivity::class.java))
         }
+        binding.searchBtn.setOnClickListener {
+            showItemList()
+        }
 
-        dataInitialize()
+        showItemList()
+    }
 
+    private fun showItemList() {
+        getUserData()
         val layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recycler
         // Divider 추가
@@ -91,7 +98,39 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         recyclerView.setHasFixedSize(true)
         adapter = MyAdapter(joinArrayList)
         recyclerView.adapter = adapter
+    }
 
+    private fun getUserData() {
+        joinArrayList = arrayListOf<Join>()
+        dbref = FirebaseDatabase.getInstance().getReference("Posting")
+
+        dbref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (userSnapshot in snapshot.children) {
+                        val getData = userSnapshot.getValue(Post::class.java)
+                        Log.d("db", "test2: $getData")
+
+                        val join = Join(
+                            profileImage = R.drawable.profile,
+                            nickname = "test",
+                            origin = getData!!.search.originName.toString(),
+                            destination = getData.search.destinationName.toString(),
+                            currentNumberPeople = getData.currentNumberPeople,
+                            requestNumberPeople = getData.requestNumberPeople
+                        )
+                        Log.d("db", "join: $join")
+                        joinArrayList.add(join)
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     private fun dataInitialize() {
@@ -132,7 +171,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             1,
             1,
         )
-        requestNumberPeople= arrayOf(
+        requestNumberPeople = arrayOf(
             4,
             4,
             4,
