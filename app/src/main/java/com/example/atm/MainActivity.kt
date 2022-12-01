@@ -10,7 +10,7 @@ import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     // FirebaseAuth
     private lateinit var auth: FirebaseAuth
@@ -33,10 +33,12 @@ class MainActivity : AppCompatActivity() {
                     auth = FirebaseAuth.getInstance()
                     databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
 
-                    databaseRef.addValueEventListener(object: ValueEventListener {
+                    databaseRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            val nickname = snapshot.child("UserAccount").child(auth.currentUser?.uid.toString()).child("nickName").getValue().toString()
-                            Log.d("Main", nickname+"2")
+                            val nickname = snapshot.child("UserAccount")
+                                .child(auth.currentUser?.uid.toString()).child("nickName")
+                                .getValue().toString()
+                            Log.d("Main", nickname + "2")
                             val bundle = Bundle()
                             bundle.putString("nickname", nickname)
                             replaceChatFragment(bundle)
