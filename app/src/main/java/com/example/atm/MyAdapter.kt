@@ -9,7 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 
-class MyAdapter(private val joinList: ArrayList<Join>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter(private val joinList: ArrayList<Join>) :
+    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -25,7 +26,13 @@ class MyAdapter(private val joinList: ArrayList<Join>) : RecyclerView.Adapter<My
         holder.nickname.text = currentItem.nickname
         holder.origin.text = currentItem.origin
         holder.destination.text = currentItem.destination
-        holder.numberOfMember.text = currentItem.currentNumberPeople.toString() +" / " +currentItem.requestNumberPeople.toString()
+        holder.numberOfMember.text =
+            currentItem.currentNumberPeople.toString() + " / " + currentItem.requestNumberPeople.toString()
+
+        // 아이템 클릭 이벤트
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(it, position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -34,10 +41,19 @@ class MyAdapter(private val joinList: ArrayList<Join>) : RecyclerView.Adapter<My
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
-        val nickname:TextView = itemView.findViewById(R.id.nickname)
-        val origin:TextView = itemView.findViewById(R.id.textViewOrigin)
-        val destination:TextView = itemView.findViewById(R.id.textViewDestination)
-        val numberOfMember:TextView = itemView.findViewById(R.id.textViewNumberOfMember)
-
+        val nickname: TextView = itemView.findViewById(R.id.nickname)
+        val origin: TextView = itemView.findViewById(R.id.textViewOrigin)
+        val destination: TextView = itemView.findViewById(R.id.textViewDestination)
+        val numberOfMember: TextView = itemView.findViewById(R.id.textViewNumberOfMember)
     }
+
+    interface OnItemClickListener {
+        fun onClick(v: View, position: Int)
+    }
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+
+    private lateinit var itemClickListener: OnItemClickListener
 }
