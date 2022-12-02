@@ -7,4 +7,133 @@
   android:layout_height="match_parent"
   tools:context=".DetailActivity">
 
+  <androidx.appcompat.widget.Toolbar
+    android:id="@+id/detailToolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="?attr/actionBarTheme"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/detailCloseBtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    app:layout_constraintStart_toStartOf="@+id/detailToolbar"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/ic_baseline_close_24"/>
+
+  <TextView
+    android:id="@+id/detailTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="52dp"
+    android:text="택시 같이 탈 인원 모집"
+    android:textSize="20sp"
+    app:layout_constraintStart_toEndOf="@+id/detailCloseBtn"
+    app:layout_constraintTop_toTopOf="parent"/>
+  <TextView
+    android:id="@+id/detailOrigin"
+    android:layout_width="192dp"
+    android:layout_height="31dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="38dp"
+    android:background="@drawable/box_border"
+    android:gravity="center_vertical"
+    android:text="출발지"
+    app:layout_constraintStart_toEndOf="@+id/origImageView"
+    app:layout_constraintTop_toBottomOf="@+id/detailToolbar"/>
+
+  <TextView
+    android:id="@+id/detailDestination"
+    android:layout_width="192dp"
+    android:layout_height="31dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="32dp"
+    android:background="@drawable/box_border"
+    android:gravity="center_vertical"
+    android:text="도착지"
+    app:layout_constraintStart_toEndOf="@+id/destImageView"
+    app:layout_constraintTop_toBottomOf="@+id/detailOrigin"/>
+
+  <ImageView
+    android:id="@+id/destImageView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="40dp"
+    android:layout_marginTop="32dp"
+    android:outlineAmbientShadowColor="#5EAF75"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/origImageView"
+    app:srcCompat="@android:drawable/ic_dialog_map"/>
+
+  <ImageView
+    android:id="@+id/origImageView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="40dp"
+    android:layout_marginTop="36dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/detailToolbar"
+    app:srcCompat="@android:drawable/ic_menu_mylocation"/>
+
+  <ImageView
+    android:id="@+id/imageView8"
+    android:layout_width="55dp"
+    android:layout_height="49dp"
+    android:layout_marginStart="40dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/detailRequestMember"
+    app:srcCompat="@drawable/ic_baseline_people_outline_24"/>
+
+  <TextView
+    android:id="@+id/detailRequestMember"
+    android:layout_width="124dp"
+    android:layout_height="19dp"
+    android:layout_marginStart="40dp"
+    android:layout_marginTop="40dp"
+    android:text="현재인원 / 모집인원"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/destImageView"/>
+
+  <TextView
+    android:id="@+id/detailCurrentMember"
+    android:layout_width="75dp"
+    android:layout_height="49dp"
+    android:layout_marginTop="56dp"
+    android:layout_marginStart="4dp"
+    android:gravity="center_horizontal|center_vertical"
+    android:text="0명"
+    app:layout_constraintStart_toEndOf="@+id/detailRequestMember"
+    app:layout_constraintTop_toBottomOf="@+id/detailDestination"/>
+  <TextView
+    android:id="@+id/detailComment"
+    android:layout_width="337dp"
+    android:layout_height="111dp"
+    android:layout_marginTop="66dp"
+    android:layout_marginStart="39dp"
+    android:background="@drawable/box_border"
+    android:ems="10"
+    android:gravity="start|top"
+    android:hint="할 말을 적어주세요!"
+    android:inputType="textMultiLine"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/imageView8"/>
+
+  <Button
+    android:id="@+id/joinButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="160dp"
+    android:layout_marginTop="36dp"
+    android:text="참여하기"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/detailComment"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
