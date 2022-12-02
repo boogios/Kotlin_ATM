@@ -18,6 +18,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var joinArrayList: ArrayList<Join>
+    private lateinit var postArrayList: ArrayList<Post>
 
     private lateinit var imageId: Array<Int>
     private lateinit var nickname: Array<String>
@@ -104,7 +105,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             override fun onClick(v: View, position: Int) {
                 Log.d(
                     "db",
-                    "View: $v, Position: $position"
+                    "join: ${joinArrayList[position]}, Position: $position"
+                )
+                Log.d(
+                    "db",
+                    "post: ${postArrayList[position]}, Position: $position"
                 )
             }
 
@@ -112,7 +117,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun getUserData() {
+        postArrayList = arrayListOf<Post>()
         joinArrayList = arrayListOf<Join>()
+
         dbref = FirebaseDatabase.getInstance().getReference("Posting")
 
         dbref.addValueEventListener(object : ValueEventListener {
@@ -120,6 +127,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 if (snapshot.exists()) {
                     for (userSnapshot in snapshot.children) {
                         val getData = userSnapshot.getValue(Post::class.java)
+                        if (getData != null) {
+                            postArrayList.add(getData)
+                        }
                         Log.d("db", "test2: $getData")
 
                         val join = Join(
