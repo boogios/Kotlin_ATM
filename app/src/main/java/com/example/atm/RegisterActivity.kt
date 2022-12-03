@@ -34,7 +34,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // FirebaseAuth
         auth = FirebaseAuth.getInstance()
-        databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
+        databaseRef = FirebaseDatabase.getInstance().getReference()
 
         // launcher
         originLauncher =

@@ -1,8 +1,8 @@
 package com.example.atm
 
 data class Post(
-    var search: Search,
-    var currentNumberPeople: Int,
-    var requestNumberPeople: Int,
-    var comment: String
+    var search: Search = Search(null, null, null, null, null, null, null, null, null, null),
+    var currentNumberPeople: Int = 0,
+    var requestNumberPeople: Int = 0,
+    var comment: String = ""
 )

@@ -10,18 +10,22 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.atm.databinding.FragmentHomeBinding
+import com.google.firebase.database.*
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
+    private lateinit var dbref: DatabaseReference
 
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var joinArrayList: ArrayList<Join>
+    private lateinit var postArrayList: ArrayList<Post>
 
     private lateinit var imageId: Array<Int>
     private lateinit var nickname: Array<String>
     private lateinit var origin: Array<String>
     private lateinit var destination: Array<String>
-    private lateinit var numberOfMember: Array<Int>
+    private lateinit var currentNumberPeople: Array<Int>
+    private lateinit var requestNumberPeople: Array<Int>
     private lateinit var originLauncher: ActivityResultLauncher<Intent>
     private lateinit var destinationLauncher: ActivityResultLauncher<Intent>
     private var mySearch = Search()
@@ -69,16 +73,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             destinationLauncher.launch(intent)
         }
         binding.closeButton.setOnClickListener {
-            binding.searchOrigin.text=""
-            binding.searchDestination.text=""
+            binding.searchOrigin.text = ""
+            binding.searchDestination.text = ""
             mySearch = Search()
         }
         binding.registerBtn.setOnClickListener {
             startActivity(Intent(activity, RegisterActivity::class.java))
         }
+        binding.searchBtn.setOnClickListener {
+            showItemList()
+        }
 
-        dataInitialize()
+        showItemList()
+    }
 
+    private fun showItemList() {
+        getUserData()
         val layoutManager = LinearLayoutManager(context)
         recyclerView = binding.recycler
         // Divider 추가
@@ -90,6 +100,58 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         adapter = MyAdapter(joinArrayList)
         recyclerView.adapter = adapter
 
+        // 리스트 아이템 클릭 시
+        adapter.setItemClickListener(object : MyAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                Log.d(
+                    "db",
+                    "join: ${joinArrayList[position]}, Position: $position"
+                )
+                Log.d(
+                    "db",
+                    "post: ${postArrayList[position]}, Position: $position"
+                )
+            }
+
+        })
+    }
+
+    private fun getUserData() {
+        postArrayList = arrayListOf<Post>()
+        joinArrayList = arrayListOf<Join>()
+
+        dbref = FirebaseDatabase.getInstance().getReference("Posting")
+
+        dbref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (userSnapshot in snapshot.children) {
+                        val getData = userSnapshot.getValue(Post::class.java)
+                        if (getData != null) {
+                            postArrayList.add(getData)
+                        }
+                        Log.d("db", "test2: $getData")
+
+                        val join = Join(
+                            profileImage = R.drawable.profile,
+                            nickname = "test",
+                            origin = getData!!.search.originName.toString(),
+                            destination = getData.search.destinationName.toString(),
+                            currentNumberPeople = getData.currentNumberPeople,
+                            requestNumberPeople = getData.requestNumberPeople
+                        )
+                        Log.d("db", "join: $join")
+                        joinArrayList.add(join)
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     private fun dataInitialize() {
@@ -123,16 +185,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             "서울과학기술대학교 정문",
             "서울과학기술대학교 정문",
         )
-        numberOfMember = arrayOf(
+        currentNumberPeople = arrayOf(
             1,
             1,
             1,
             1,
             1,
         )
+        requestNumberPeople = arrayOf(
+            4,
+            4,
+            4,
+            4,
+            4,
+        )
 
         for (i in imageId.indices) {
-            val join = Join(imageId[i], nickname[i], origin[i], destination[i], numberOfMember[i])
+            val join = Join(
+                imageId[i],
+                nickname[i],
+                origin[i],
+                destination[i],
+                currentNumberPeople[i],
+                requestNumberPeople[i]
+            )
+
             joinArrayList.add(join)
 
         }
