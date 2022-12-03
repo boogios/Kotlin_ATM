@@ -1,5 +1,6 @@
 package com.example.atm
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -26,15 +27,7 @@ class SettingFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var databaseRef: DatabaseReference
 
-    private lateinit var adapter: MyAdapter
-    private lateinit var recyclerView: RecyclerView
     private lateinit var joinArrayList: ArrayList<Join>
-
-    private lateinit var imageId: Array<Int>
-    private lateinit var nickname: Array<String>
-    private lateinit var origin: Array<String>
-    private lateinit var destination: Array<String>
-    private lateinit var numberOfMember: Array<Int>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,66 +54,6 @@ class SettingFragment : Fragment() {
         }
 
         dataInitialize(databaseRef)
-//        dataInitialize2()
-
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView = binding.recyclerView
-        // Divider 추가
-        val dividerItemDecoration =
-            DividerItemDecoration(recyclerView.context, layoutManager.orientation)
-        recyclerView.addItemDecoration(dividerItemDecoration)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.setHasFixedSize(true)
-        adapter = MyAdapter(joinArrayList)
-        recyclerView.adapter = adapter
-    }
-
-    private fun dataInitialize2() {
-        joinArrayList = arrayListOf<Join>()
-
-        imageId = arrayOf(
-            R.drawable.profile,
-            R.drawable.profile,
-            R.drawable.profile,
-            R.drawable.profile,
-            R.drawable.profile,
-        )
-        nickname = arrayOf(
-            "apple",
-            "apple",
-            "apple",
-            "apple",
-            "apple",
-        )
-        origin = arrayOf(
-            "공릉역",
-            "공릉역",
-            "공릉역",
-            "공릉역",
-            "공릉역",
-        )
-        destination = arrayOf(
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-        )
-        numberOfMember = arrayOf(
-            1,
-            1,
-            1,
-            1,
-            1,
-        )
-
-        for (i in imageId.indices) {
-            val join = Join(imageId[i], nickname[i], origin[i], destination[i], numberOfMember[i])
-            Log.d("ITM", join.toString())
-            joinArrayList.add(join)
-
-        }
-
 
     }
 
@@ -138,16 +71,13 @@ class SettingFragment : Fragment() {
                         snapshot.child("Posting").child(auth.currentUser?.uid.toString()).child("search").getValue(Search::class.java)
                     val currentUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
                         .child("currentNumberPeople").getValue().toString()
-                    Log.d("ITM", getData.toString())
-                    val join = Join(
-                        R.drawable.profile,
-                        nickname,
-                        getData?.originName.toString(),
-                        getData?.destinationName.toString(),
-                        currentUserNumber.toInt()
-                    )
-                    Log.d("ITM", join.toString())
-                    joinArrayList.add(join)
+                    val requestUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
+                        .child("requestNumberPeople").getValue().toString()
+
+                    binding.txtSettingNickname.text = nickname
+                    binding.txtOrigin.text = getData?.originName.toString()
+                    binding.txtDestination.text = getData?.destinationName.toString()
+                    binding.txtCurrentByRequest.text = "$currentUserNumber/$requestUserNumber"
                 }
             }
 
