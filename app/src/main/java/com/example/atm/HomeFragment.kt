@@ -111,6 +111,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     "db",
                     "post: ${postArrayList[position]}, Position: $position"
                 )
+                val intent = Intent(activity, DetailActivity::class.java)
+                intent.putExtra("post",postArrayList[position])
+                intent.putExtra("join",joinArrayList[position])
+                startActivity(intent)
             }
 
         })
