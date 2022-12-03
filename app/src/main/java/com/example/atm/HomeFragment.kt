@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -111,10 +112,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     "db",
                     "post: ${postArrayList[position]}, Position: $position"
                 )
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra("post",postArrayList[position])
-                intent.putExtra("join",joinArrayList[position])
-                startActivity(intent)
+                if (postArrayList[position].currentNumberPeople == postArrayList[position].requestNumberPeople) {
+                    Toast.makeText(context, "모집이 만료되었습니다!", Toast.LENGTH_LONG).show()
+                } else {
+                    val intent = Intent(activity, DetailActivity::class.java)
+                    intent.putExtra("post", postArrayList[position])
+                    intent.putExtra("join", joinArrayList[position])
+                    startActivity(intent)
+                }
             }
 
         })
