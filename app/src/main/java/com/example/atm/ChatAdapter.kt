@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ChatAdapter(
     val nickName: String,
-    val itemList: ArrayList<ChatLayout>
+    private val itemList: ArrayList<ChatLayout>
 ): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatAdapter.ViewHolder {
@@ -29,7 +29,7 @@ class ChatAdapter(
         }
         holder.nickname.text = itemList[position].nickname
         holder.contents.text = itemList[position].contents
-        // holder.time.text = itemList[position].time
+        holder.time.text = itemList[position].time
         // holder.userImage = itemList[position].userImage
     }
 
@@ -37,7 +37,7 @@ class ChatAdapter(
         val card: CardView = itemView.findViewById(R.id.chatCardView)
         val nickname: TextView = itemView.findViewById(R.id.chatNickname)
         val contents: TextView = itemView.findViewById(R.id.chatMessage)
-        // val time: TextView = itemView.findViewById(R.id.chatTime)
+        val time: TextView = itemView.findViewById(R.id.chatTime)
         // var userImage: ImageView = itemView.findViewById(R.id.chatUserImage)
     }
 }
