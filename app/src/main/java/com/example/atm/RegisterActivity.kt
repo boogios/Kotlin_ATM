@@ -9,8 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.atm.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -97,6 +96,26 @@ class RegisterActivity : AppCompatActivity() {
     private fun registerPost() {
 
         val currentUser = auth.currentUser
+        var nickname = ""
+
+        if (currentUser != null) {
+            databaseRef.child("Around-Taxi-Member").child("UserAccount").child(currentUser.uid)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        nickname = snapshot.child("nickName").getValue().toString()
+
+                        databaseRef.child("Around-Taxi-Member").child("UserAccount").child(currentUser.uid).child("chatRoom")
+                            .setValue(nickname)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+        }
+
+
         if (mySearch.originName.equals(null) or mySearch.destinationName.equals(null)) {
             return Toast.makeText(baseContext, "출발지 또는 도착지를 입력해주세요!", Toast.LENGTH_LONG).show()
         }
@@ -106,9 +125,6 @@ class RegisterActivity : AppCompatActivity() {
             requestNumberPeople = requestNumberPeople,
             comment = binding.comment.text.toString()
         )
-        Log.d("registerSearch", "$myPost")
-        Log.d("registerSearch", "${myPost.comment}")
-
 
         if (currentUser != null) {
             databaseRef.child("Posting").child(currentUser.uid).setValue(myPost)
