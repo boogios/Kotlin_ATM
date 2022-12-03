@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import com.google.protobuf.Value
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -33,12 +34,14 @@ class ChatFragment : Fragment() {
     private val chatList = arrayListOf<ChatLayout>() // 리사이클러뷰 리스트
     private lateinit var adapter: ChatAdapter // 리사이클러뷰 어댑터
     private lateinit var currentUser: String
+    private lateinit var chatRoomName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
             currentUser = it.getString("nickname").toString()
+            chatRoomName = it.getString("chatroom").toString()
         }
     }
 
@@ -51,24 +54,29 @@ class ChatFragment : Fragment() {
         val view = binding.root
 
         Toast.makeText(context, "현재 닉네임은 ${currentUser}입니다.", Toast.LENGTH_SHORT).show()
-        var chatRoomName = userAccountDatabaseReference.child(auth.currentUser?.uid.toString()).child("chatRoom").get().toString()
-        if (chatRoomName == "None") { chatRoomName = currentUser }
-        chatDB.collection("${chatRoomName}'s ChatRoom").orderBy("time", Query.Direction.ASCENDING)
-            .addSnapshotListener { snapshot, e ->
-                if (snapshot != null) {
-                    for (document in snapshot.documentChanges) {
-                        if (document.type == DocumentChange.Type.ADDED) {
-                            val nickname = document.document["nickname"].toString()
-                            val contents = document.document["contents"].toString()
-                            val time = document.document["time"].toString()
 
-                            val item = ChatLayout(nickname, contents, time)
-                            chatList.add(item)
+        if (chatRoomName == "None") {
+            Toast.makeText(context, "채팅방이 아직 없습니다",Toast.LENGTH_SHORT).show()
+            binding.btnSendMessage.isEnabled = false
+            binding.editTextMessage.isEnabled = false
+        } else {
+            chatDB.collection("${chatRoomName}'s ChatRoom").orderBy("time", Query.Direction.ASCENDING)
+                .addSnapshotListener { snapshot, e ->
+                    if (snapshot != null) {
+                        for (document in snapshot.documentChanges) {
+                            if (document.type == DocumentChange.Type.ADDED) {
+                                val nickname = document.document["nickname"].toString()
+                                val contents = document.document["contents"].toString()
+                                val time = document.document["time"].toString()
+
+                                val item = ChatLayout(nickname, contents, time)
+                                chatList.add(item)
+                            }
+                            adapter.notifyDataSetChanged()
                         }
-                        adapter.notifyDataSetChanged()
                     }
                 }
-            }
+        }
 
         // 리사이클러뷰 설정
         binding.rvMessageList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
