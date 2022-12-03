@@ -38,9 +38,13 @@ class MainActivity : AppCompatActivity() {
                             val nickname = snapshot.child("UserAccount")
                                 .child(auth.currentUser?.uid.toString()).child("nickName")
                                 .getValue().toString()
+                            val chatRoom = snapshot.child("UserAccount")
+                                .child(auth.currentUser?.uid.toString()).child("chatRoom")
+                                .getValue().toString()
                             Log.d("Main", nickname + "2")
                             val bundle = Bundle()
                             bundle.putString("nickname", nickname)
+                            bundle.putString("chatroom", chatRoom)
                             replaceChatFragment(bundle)
                         }
 
