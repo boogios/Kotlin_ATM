@@ -1,11 +1,11 @@
 package com.example.atm
 
-import android.media.Image
-import android.widget.ImageView
+import java.time.LocalDateTime
+import java.util.*
 
 class ChatLayout(
     val nickname: String,
-    val contents: String
-    // val time: String
+    val contents: String,
+    val time: String
     // val userImage: ImageView
 )
