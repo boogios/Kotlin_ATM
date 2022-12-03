@@ -1,5 +1,7 @@
 package com.example.atm
 
+import java.io.Serializable
+
 data class Join(
     var profileImage: Int,
     var nickname: String,
@@ -7,5 +9,5 @@ data class Join(
     var destination: String,
     var currentNumberPeople: Int,
     var requestNumberPeople: Int,
-)
+) : Serializable
 
