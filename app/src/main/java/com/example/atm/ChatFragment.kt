@@ -14,9 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
-import com.google.protobuf.Value
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -30,11 +28,11 @@ class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var registration: ListenerRegistration // 문서 수신할때 사용
     private val chatList = arrayListOf<ChatLayout>() // 리사이클러뷰 리스트
     private lateinit var adapter: ChatAdapter // 리사이클러뷰 어댑터
     private lateinit var currentUser: String
     private lateinit var chatRoomName: String
+    private lateinit var myLikes: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +40,7 @@ class ChatFragment : Fragment() {
         arguments?.let {
             currentUser = it.getString("nickname").toString()
             chatRoomName = it.getString("chatroom").toString()
+            myLikes = it.getString("likes").toString()
         }
     }
 
@@ -72,8 +71,9 @@ class ChatFragment : Fragment() {
                                 val nickname = document.document["nickname"].toString()
                                 val contents = document.document["contents"].toString()
                                 val time = document.document["time"].toString()
+                                val likes = document.document["likes"].toString()
 
-                                val item = ChatLayout(nickname, contents, time)
+                                val item = ChatLayout(nickname, contents, time, likes)
                                 chatList.add(item)
                             }
                             adapter.notifyDataSetChanged()
@@ -97,7 +97,8 @@ class ChatFragment : Fragment() {
                 "nickname" to currentUser,
                 "contents" to binding.editTextMessage.text.toString(),
                 "time" to LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                "likes" to myLikes
             )
 
             chatDB.collection("${chatRoomName}'s ChatRoom").add(data)

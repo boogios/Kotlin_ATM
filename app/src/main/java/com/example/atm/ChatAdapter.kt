@@ -30,7 +30,7 @@ class ChatAdapter(
         holder.nickname.text = itemList[position].nickname
         holder.contents.text = itemList[position].contents
         holder.time.text = itemList[position].time
-        // holder.userImage = itemList[position].userImage
+        holder.likes.text = itemList[position].likes
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -38,6 +38,6 @@ class ChatAdapter(
         val nickname: TextView = itemView.findViewById(R.id.chatNickname)
         val contents: TextView = itemView.findViewById(R.id.chatMessage)
         val time: TextView = itemView.findViewById(R.id.chatTime)
-        // var userImage: ImageView = itemView.findViewById(R.id.chatUserImage)
+        var likes: TextView = itemView.findViewById(R.id.chatLikes)
     }
 }
