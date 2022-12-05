@@ -8,7 +8,7 @@
     tools:context=".ChatFragment">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/txt_roomInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/txt_roomInfo"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
@@ -54,5 +54,15 @@
         app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTextMessage" />
+
+    <Button
+        android:id="@+id/btn_leaveChatRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="LEAVE"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_roomInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_roomInfo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

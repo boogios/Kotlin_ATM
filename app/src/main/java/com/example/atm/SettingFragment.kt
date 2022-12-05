@@ -1,21 +1,15 @@
 package com.example.atm
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
+import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.atm.databinding.FragmentSettingBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 
 class SettingFragment : Fragment() {
@@ -45,7 +39,19 @@ class SettingFragment : Fragment() {
         // FirebaseAuth
         auth = FirebaseAuth.getInstance()
 
-        databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
+        databaseRef = FirebaseDatabase.getInstance().reference
+
+        binding.layoutJoinedInfo.isInvisible = false
+        binding.txtNotYetJoined.isInvisible = false
+
+        binding.btnLeaveChatRoomInSetting.setOnClickListener {
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                databaseRef.child("Around-Taxi-Member").child("UserAccount").child(currentUser.uid).child("chatRoom").setValue("None")
+                binding.layoutJoinedInfo.isInvisible = true
+                binding.txtNotYetJoined.isInvisible = false
+            }
+        }
 
         binding.btnLogout.setOnClickListener {
             auth.signOut()
@@ -66,18 +72,25 @@ class SettingFragment : Fragment() {
         Ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val nickname = snapshot.child("UserAccount").child(auth.currentUser?.uid.toString()).child("nickName").getValue().toString()
                     var getData =
                         snapshot.child("Posting").child(auth.currentUser?.uid.toString()).child("search").getValue(Search::class.java)
-                    val currentUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
-                        .child("currentNumberPeople").getValue().toString()
-                    val requestUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
-                        .child("requestNumberPeople").getValue().toString()
+                    if (getData?.originName == null) {
+                        binding.layoutJoinedInfo.isInvisible = true
+                        binding.txtNotYetJoined.isInvisible = false
+                    } else {
+                        binding.layoutJoinedInfo.isInvisible = false
+                        binding.txtNotYetJoined.isInvisible = true
+                        val nickname = snapshot.child("Around-Taxi-Member").child("UserAccount").child(auth.currentUser?.uid.toString()).child("nickName").getValue().toString()
+                        val currentUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
+                            .child("currentNumberPeople").getValue().toString()
+                        val requestUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
+                            .child("requestNumberPeople").getValue().toString()
 
-                    binding.txtSettingNickname.text = nickname
-                    binding.txtOrigin.text = getData?.originName.toString()
-                    binding.txtDestination.text = getData?.destinationName.toString()
-                    binding.txtCurrentByRequest.text = "$currentUserNumber/$requestUserNumber"
+                        binding.txtSettingNickname.text = nickname
+                        binding.txtOrigin.text = getData?.originName.toString()
+                        binding.txtDestination.text = getData?.destinationName.toString()
+                        binding.txtCurrentByRequest.text = "$currentUserNumber/$requestUserNumber"
+                    }
                 }
             }
 

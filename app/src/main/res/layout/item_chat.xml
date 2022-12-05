@@ -38,11 +38,32 @@
             android:id="@+id/chatTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
             android:text="시간"
             app:layout_constraintBottom_toBottomOf="@+id/chatMessage"
-            app:layout_constraintStart_toEndOf="@+id/chatMessage"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/chatMessage" />
+
+        <TextView
+            android:id="@+id/chatLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Likes"
+            app:layout_constraintBottom_toBottomOf="@+id/chatNickname"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/chatNickname"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/chatNickname"
+            app:layout_constraintStart_toEndOf="@+id/chatNickname"
+            app:layout_constraintTop_toTopOf="@+id/chatNickname"
+            app:srcCompat="@drawable/heart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
