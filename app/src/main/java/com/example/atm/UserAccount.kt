@@ -5,6 +5,6 @@ data class UserAccount(
     val password: String,
     val gender: String,
     val nickName: String,
-    val manner: Double = 36.5,
+    val like: Int = 0,
     val chatRoom: String = "None"
 )
