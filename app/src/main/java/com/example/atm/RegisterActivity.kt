@@ -104,8 +104,31 @@ class RegisterActivity : AppCompatActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         nickname = snapshot.child("nickName").getValue().toString()
 
-                        databaseRef.child("Around-Taxi-Member").child("UserAccount").child(currentUser.uid).child("chatRoom")
+                        databaseRef.child("Around-Taxi-Member").child("UserAccount")
+                            .child(currentUser.uid).child("chatRoom")
                             .setValue(nickname)
+
+                        if (mySearch.originName.equals(null) or mySearch.destinationName.equals(null)) {
+                            return Toast.makeText(
+                                baseContext,
+                                "출발지 또는 도착지를 입력해주세요!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        val myPost = Post(
+                            search = mySearch,
+                            currentNumberPeople = currentNumberPeople,
+                            requestNumberPeople = requestNumberPeople,
+                            comment = binding.comment.text.toString(),
+                            nickname = nickname
+                        )
+
+                        if (currentUser != null) {
+                            databaseRef.child("Posting").child(currentUser.uid).setValue(myPost)
+                            Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
+                            Log.d("registerSearch", "$myPost")
+                            finish()
+                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -115,23 +138,6 @@ class RegisterActivity : AppCompatActivity() {
                 })
         }
 
-
-        if (mySearch.originName.equals(null) or mySearch.destinationName.equals(null)) {
-            return Toast.makeText(baseContext, "출발지 또는 도착지를 입력해주세요!", Toast.LENGTH_LONG).show()
-        }
-        val myPost = Post(
-            search = mySearch,
-            currentNumberPeople = currentNumberPeople,
-            requestNumberPeople = requestNumberPeople,
-            comment = binding.comment.text.toString()
-        )
-
-        if (currentUser != null) {
-            databaseRef.child("Posting").child(currentUser.uid).setValue(myPost)
-            Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
-            Log.d("registerSearch", "$myPost")
-            finish()
-        }
 
     }
 

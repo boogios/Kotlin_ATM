@@ -21,15 +21,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var joinArrayList: ArrayList<Join>
     private lateinit var postArrayList: ArrayList<Post>
 
-    private lateinit var imageId: Array<Int>
-    private lateinit var nickname: Array<String>
-    private lateinit var origin: Array<String>
-    private lateinit var destination: Array<String>
-    private lateinit var currentNumberPeople: Array<Int>
-    private lateinit var requestNumberPeople: Array<Int>
     private lateinit var originLauncher: ActivityResultLauncher<Intent>
     private lateinit var destinationLauncher: ActivityResultLauncher<Intent>
     private var mySearch = Search()
+
+    // 비교할 거리 150 m
+    private val distance = 150
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -139,19 +136,57 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                         if (getData != null) {
                             postArrayList.add(getData)
                         }
-                        Log.d("db", "test2: $getData")
+                        Log.d("post", "post: $getData")
 
-                        val join = Join(
-                            profileImage = R.drawable.profile,
-                            nickname = "test",
-                            origin = getData!!.search.originName.toString(),
-                            destination = getData.search.destinationName.toString(),
-                            currentNumberPeople = getData.currentNumberPeople,
-                            requestNumberPeople = getData.requestNumberPeople
-                        )
-                        Log.d("db", "join: $join")
-                        joinArrayList.add(join)
+                        if (mySearch.originName.isNullOrEmpty() || mySearch.destinationName.isNullOrEmpty()) {
+                            joinArrayList.add(
+                                Join(
+                                    profileImage = R.drawable.profile,
+                                    nickname = getData!!.nickname,
+                                    origin = getData.search.originName.toString(),
+                                    destination = getData.search.destinationName.toString(),
+                                    currentNumberPeople = getData.currentNumberPeople,
+                                    requestNumberPeople = getData.requestNumberPeople
+                                )
+                            )
+                        } else {
+                            val oriLat1 = mySearch.originY!!.toDouble()
+                            val oriLon1 = mySearch.originX!!.toDouble()
+                            val oriLat2 = getData!!.search.originY!!.toDouble()
+                            val oriLon2 = getData.search.originX!!.toDouble()
 
+                            val destLat1 = mySearch.destinationY!!.toDouble()
+                            val destLon1 = mySearch.destinationX!!.toDouble()
+                            val destLat2 = getData.search.destinationY!!.toDouble()
+                            val destLon2 = getData.search.destinationX!!.toDouble()
+
+                            val oriDistance =
+                                DistanceManager.getDistance(oriLat1, oriLon1, oriLat2, oriLon2)
+                            Log.d(
+                                "distance",
+                                "${mySearch.originName} 과 ${getData.search.originName} 거리 (m): $oriDistance"
+                            )
+
+                            val destDistance =
+                                DistanceManager.getDistance(destLat1, destLon1, destLat2, destLon2)
+                            Log.d(
+                                "distance",
+                                "${mySearch.destinationName} 과 ${getData.search.destinationName} 거리 (m): $destDistance"
+                            )
+
+                            if (oriDistance <= distance && destDistance <= distance) {
+                                joinArrayList.add(
+                                    Join(
+                                        profileImage = R.drawable.profile,
+                                        nickname = "test",
+                                        origin = getData!!.search.originName.toString(),
+                                        destination = getData.search.destinationName.toString(),
+                                        currentNumberPeople = getData.currentNumberPeople,
+                                        requestNumberPeople = getData.requestNumberPeople
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -161,68 +196,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
 
         })
-    }
-
-    private fun dataInitialize() {
-        joinArrayList = arrayListOf<Join>()
-
-        imageId = arrayOf(
-            R.drawable.profile,
-            R.drawable.profile,
-            R.drawable.profile,
-            R.drawable.profile,
-            R.drawable.profile,
-        )
-        nickname = arrayOf(
-            "apple",
-            "apple",
-            "apple",
-            "apple",
-            "apple",
-        )
-        origin = arrayOf(
-            "공릉역",
-            "공릉역",
-            "공릉역",
-            "공릉역",
-            "공릉역",
-        )
-        destination = arrayOf(
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-            "서울과학기술대학교 정문",
-        )
-        currentNumberPeople = arrayOf(
-            1,
-            1,
-            1,
-            1,
-            1,
-        )
-        requestNumberPeople = arrayOf(
-            4,
-            4,
-            4,
-            4,
-            4,
-        )
-
-        for (i in imageId.indices) {
-            val join = Join(
-                imageId[i],
-                nickname[i],
-                origin[i],
-                destination[i],
-                currentNumberPeople[i],
-                requestNumberPeople[i]
-            )
-
-            joinArrayList.add(join)
-
-        }
-
-
     }
 }
