@@ -59,10 +59,14 @@ class ChatFragment : Fragment() {
             Toast.makeText(context, "채팅방이 아직 없습니다",Toast.LENGTH_SHORT).show()
             binding.btnSendMessage.isEnabled = false
             binding.editTextMessage.isEnabled = false
+            binding.txtRoomInfo.text = "No chat room yet"
+            binding.btnLeaveChatRoom.visibility = View.INVISIBLE
         } else {
             chatDB.collection("${chatRoomName}'s ChatRoom").orderBy("time", Query.Direction.ASCENDING)
                 .addSnapshotListener { snapshot, e ->
                     if (snapshot != null) {
+                        binding.txtRoomInfo.text = "${chatRoomName}'s ChatRoom"
+                        binding.btnLeaveChatRoom.visibility = View.VISIBLE
                         for (document in snapshot.documentChanges) {
                             if (document.type == DocumentChange.Type.ADDED) {
                                 val nickname = document.document["nickname"].toString()
@@ -92,7 +96,8 @@ class ChatFragment : Fragment() {
             val data = hashMapOf(
                 "nickname" to currentUser,
                 "contents" to binding.editTextMessage.text.toString(),
-                "time" to LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                "time" to LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             )
 
             chatDB.collection("${chatRoomName}'s ChatRoom").add(data)
@@ -105,13 +110,21 @@ class ChatFragment : Fragment() {
                 }
         }
 
+
+
+        binding.btnLeaveChatRoom.setOnClickListener {
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                userAccountDatabaseReference.child(currentUser.uid).child("chatRoom").setValue("None")
+            }
+        }
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        chatList.add(ChatLayout("알림", "$currentUser enter the chat room", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
     }
 
     override fun onDestroy() {
