@@ -7,5 +7,6 @@ data class Post(
     var currentNumberPeople: Int = 0,
     var requestNumberPeople: Int = 0,
     var comment: String = "",
-    var nickname: String = ""
+    var nickname: String = "",
+    var uid: String = ""
 ) : Serializable
