@@ -36,7 +36,7 @@ class DetailActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
-        postingRef = FirebaseDatabase.getInstance().getReference()
+        postingRef = FirebaseDatabase.getInstance().getReference("Posting")
 
         binding.detailCurrentMember.text =
             currentMember.toString() + " / " + requestMember.toString()
@@ -48,7 +48,7 @@ class DetailActivity : AppCompatActivity() {
             if (currentUser != null) {
                 databaseRef.child("UserAccount").child(currentUser.uid).child("chatRoom")
                     .setValue(joinData.nickname)
-                postingRef.child(joinData.nickname).child("currentNumberPeople")
+                postingRef.child(postData.uid).child("currentNumberPeople")
                     .setValue(postData.currentNumberPeople+1)
                 Toast.makeText(baseContext, "참여하였습니다.", Toast.LENGTH_LONG).show()
                 finish()
