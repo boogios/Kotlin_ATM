@@ -45,7 +45,7 @@ class DetailActivity : AppCompatActivity() {
             val currentUser = auth.currentUser
             if (currentUser != null) {
                 databaseRef.child("UserAccount").child(currentUser.uid).child("chatRoom")
-                    .setValue("itm1")
+                    .setValue(joinData.nickname)
                 Toast.makeText(baseContext, "참여하였습니다.", Toast.LENGTH_LONG).show()
                 finish()
             }
