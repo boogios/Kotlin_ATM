@@ -66,15 +66,14 @@ class SettingFragment : Fragment() {
     private fun dataInitialize(Ref: DatabaseReference) {
         joinArrayList = arrayListOf()
 
-        // FirebaseAuth
-        auth = FirebaseAuth.getInstance()
-
         Ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
+                    var getChatRoomData =
+                        snapshot.child("Around-Taxi-Member").child("UserAccount").child(auth.currentUser?.uid.toString()).child("chatRoom").getValue()
                     var getData =
                         snapshot.child("Posting").child(auth.currentUser?.uid.toString()).child("search").getValue(Search::class.java)
-                    if (getData?.originName == null) {
+                    if (getChatRoomData == null) {
                         binding.layoutJoinedInfo.isInvisible = true
                         binding.txtNotYetJoined.isInvisible = false
                     } else {
