@@ -125,7 +125,7 @@ class RegisterActivity : AppCompatActivity() {
                         )
 
                         if (currentUser != null) {
-                            databaseRef.child("Posting").child(currentUser.uid).setValue(myPost)
+                            databaseRef.child("Posting").child(myPost.nickname).setValue(myPost)
                             Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
                             Log.d("registerSearch", "$myPost")
                             finish()
