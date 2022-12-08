@@ -16,6 +16,7 @@ class DetailActivity : AppCompatActivity() {
 
     // Firebase Realtime DB
     private lateinit var databaseRef: DatabaseReference
+    private lateinit var postingRef: DatabaseReference
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +36,7 @@ class DetailActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
+        postingRef = FirebaseDatabase.getInstance().getReference("Posting")
 
         binding.detailCurrentMember.text =
             currentMember.toString() + " / " + requestMember.toString()
@@ -45,7 +47,9 @@ class DetailActivity : AppCompatActivity() {
             val currentUser = auth.currentUser
             if (currentUser != null) {
                 databaseRef.child("UserAccount").child(currentUser.uid).child("chatRoom")
-                    .setValue("itm1")
+                    .setValue(joinData.nickname)
+                postingRef.child(postData.nickname).child("currentNumberPeople")
+                    .setValue(postData.currentNumberPeople+1)
                 Toast.makeText(baseContext, "참여하였습니다.", Toast.LENGTH_LONG).show()
                 finish()
             }

@@ -21,7 +21,11 @@ import java.time.format.DateTimeFormatter
 class ChatFragment : Fragment() {
 
     private var auth = FirebaseAuth.getInstance()
-    private var userAccountDatabaseReference = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member").child("UserAccount")
+    private var userAccountDatabaseReference =
+        FirebaseDatabase.getInstance().getReference("Around-Taxi-Member").child("UserAccount")
+    private var postingDatabaseReference =
+        FirebaseDatabase.getInstance().getReference("Posting")
+
     // Firebase Firestore 초기화
     private var chatDB = FirebaseFirestore.getInstance()
 
@@ -33,6 +37,7 @@ class ChatFragment : Fragment() {
     private lateinit var currentUser: String
     private lateinit var chatRoomName: String
     private lateinit var myLikes: String
+    private lateinit var currentNumberOfPeople: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +46,7 @@ class ChatFragment : Fragment() {
             currentUser = it.getString("nickname").toString()
             chatRoomName = it.getString("chatroom").toString()
             myLikes = it.getString("likes").toString()
+            currentNumberOfPeople = it.getString("currentNumberOfPeople").toString()
         }
     }
 
@@ -55,13 +61,14 @@ class ChatFragment : Fragment() {
         Toast.makeText(context, "현재 닉네임은 ${currentUser}입니다.", Toast.LENGTH_SHORT).show()
 
         if (chatRoomName == "None") {
-            Toast.makeText(context, "채팅방이 아직 없습니다",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "채팅방이 아직 없습니다", Toast.LENGTH_SHORT).show()
             binding.btnSendMessage.isEnabled = false
             binding.editTextMessage.isEnabled = false
             binding.txtRoomInfo.text = "No chat room yet"
             binding.btnLeaveChatRoom.visibility = View.INVISIBLE
         } else {
-            chatDB.collection("${chatRoomName}'s ChatRoom").orderBy("time", Query.Direction.ASCENDING)
+            chatDB.collection("${chatRoomName}'s ChatRoom")
+                .orderBy("time", Query.Direction.ASCENDING)
                 .addSnapshotListener { snapshot, e ->
                     if (snapshot != null) {
                         binding.txtRoomInfo.text = "${chatRoomName}'s ChatRoom"
@@ -83,7 +90,8 @@ class ChatFragment : Fragment() {
         }
 
         // 리사이클러뷰 설정
-        binding.rvMessageList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.rvMessageList.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         adapter = ChatAdapter(currentUser, chatList)
         binding.rvMessageList.adapter = adapter
 
@@ -101,7 +109,10 @@ class ChatFragment : Fragment() {
                 "likes" to myLikes
             )
 
-            chatDB.collection("${chatRoomName}'s ChatRoom").add(data)
+            chatDB.collection("${chatRoomName}'s ChatRoom").document(
+                LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            ).set(data)
                 .addOnSuccessListener {
                     binding.editTextMessage.text.clear()
                 }
@@ -111,12 +122,13 @@ class ChatFragment : Fragment() {
                 }
         }
 
-
-
         binding.btnLeaveChatRoom.setOnClickListener {
             val currentUser = auth.currentUser
             if (currentUser != null) {
-                userAccountDatabaseReference.child(currentUser.uid).child("chatRoom").setValue("None")
+                userAccountDatabaseReference.child(currentUser.uid).child("chatRoom")
+                    .setValue("None")
+                postingDatabaseReference.child(chatRoomName).child("currentNumberPeople")
+                    .setValue(currentNumberOfPeople.toInt() - 1)
             }
         }
 
