@@ -134,6 +134,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         joinArrayList = arrayListOf<Join>()
         userArrayList = arrayListOf<UserAccount>()
 
+        val auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
 
         dbref = FirebaseDatabase.getInstance().getReference("Posting")
