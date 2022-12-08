@@ -108,6 +108,15 @@ class RegisterActivity : AppCompatActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         nickname = snapshot.child("nickName").getValue().toString()
 
+                        val memberData = hashMapOf(
+                            "PostOwner" to nickname,
+                            "member1" to "",
+                            "member2" to "",
+                            "member3" to "",
+                        )
+
+                        chatDB.collection("${nickname}'s ChatRoom Member").document("Chat Member").set(memberData)
+
                         databaseRef.child("Around-Taxi-Member").child("UserAccount")
                             .child(currentUser.uid).child("chatRoom")
                             .setValue(nickname)
@@ -130,15 +139,6 @@ class RegisterActivity : AppCompatActivity() {
                         if (currentUser != null) {
                             databaseRef.child("Posting").child(myPost.nickname).setValue(myPost)
                             Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
-
-                            val memberData = hashMapOf(
-                                "PostOwner" to nickname,
-                                "member1" to "",
-                                "member2" to "",
-                                "member3" to "",
-                            )
-
-                            chatDB.collection("${nickname}'s ChatRoom Member").add(memberData)
 
                             Log.d("registerSearch", "$myPost")
                             finish()
