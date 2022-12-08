@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
                                 .getValue().toString()
                             val currentNumberOfPeople = snapshot.child("Posting").child(chatRoom)
                                 .child("currentNumberPeople").getValue().toString()
-                            Log.d("Main", nickname + "2")
                             val bundle = Bundle()
                             bundle.putString("nickname", nickname)
                             bundle.putString("chatroom", chatRoom)
@@ -60,7 +59,28 @@ class MainActivity : AppCompatActivity() {
                         }
                     })
                 }
-                R.id.settings -> replaceFragment(SettingFragment())
+                R.id.settings -> {
+                    auth = FirebaseAuth.getInstance()
+                    databaseRef = FirebaseDatabase.getInstance().reference
+
+                    databaseRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val chatRoom = snapshot.child("Around-Taxi-Member").child("UserAccount")
+                                .child(auth.currentUser?.uid.toString()).child("chatRoom")
+                                .getValue().toString()
+                            val currentNumberOfPeople = snapshot.child("Posting").child(chatRoom)
+                                .child("currentNumberPeople").getValue().toString()
+                            val bundle = Bundle()
+                            bundle.putString("chatroom", chatRoom)
+                            bundle.putString("currentNumberOfPeople", currentNumberOfPeople)
+                            replaceSettingFragment(bundle)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            // 읽어오기 실패했을 때
+                        }
+                    })
+                }
                 else -> {
 
                 }
@@ -79,6 +99,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceChatFragment(bundle: Bundle) {
         val destination = ChatFragment()
+        destination.arguments = bundle
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, destination)
+            .commitAllowingStateLoss()
+    }
+
+    private fun replaceSettingFragment(bundle: Bundle) {
+        val destination = SettingFragment()
         destination.arguments = bundle
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, destination)

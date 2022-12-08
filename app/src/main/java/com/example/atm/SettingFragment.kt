@@ -22,6 +22,17 @@ class SettingFragment : Fragment() {
     private lateinit var databaseRef: DatabaseReference
 
     private lateinit var joinArrayList: ArrayList<Join>
+    private lateinit var chatRoomName: String
+    private lateinit var currentNumberOfPeople: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            chatRoomName = it.getString("chatroom").toString()
+            currentNumberOfPeople = it.getString("currentNumberOfPeople").toString()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +58,10 @@ class SettingFragment : Fragment() {
         binding.btnLeaveChatRoomInSetting.setOnClickListener {
             val currentUser = auth.currentUser
             if (currentUser != null) {
-                databaseRef.child("Around-Taxi-Member").child("UserAccount").child(currentUser.uid).child("chatRoom").setValue("None")
+                databaseRef.child("Around-Taxi-Member").child("UserAccount").child(currentUser.uid)
+                    .child("chatRoom").setValue("None")
+                databaseRef.child("Posting").child(chatRoomName).child("currentNumberPeople")
+                    .setValue(currentNumberOfPeople.toInt() - 1)
                 binding.layoutJoinedInfo.isInvisible = true
                 binding.txtNotYetJoined.isInvisible = false
             }
@@ -70,20 +84,26 @@ class SettingFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     var getChatRoomData =
-                        snapshot.child("Around-Taxi-Member").child("UserAccount").child(auth.currentUser?.uid.toString()).child("chatRoom").getValue()
+                        snapshot.child("Around-Taxi-Member").child("UserAccount")
+                            .child(auth.currentUser?.uid.toString()).child("chatRoom").getValue()
                     var getData =
-                        snapshot.child("Posting").child(auth.currentUser?.uid.toString()).child("search").getValue(Search::class.java)
-                    if (getChatRoomData == null) {
+                        snapshot.child("Posting").child(getChatRoomData as String)
+                            .child("search").getValue(Search::class.java)
+                    if (getChatRoomData == "None") {
                         binding.layoutJoinedInfo.isInvisible = true
                         binding.txtNotYetJoined.isInvisible = false
                     } else {
                         binding.layoutJoinedInfo.isInvisible = false
                         binding.txtNotYetJoined.isInvisible = true
-                        val nickname = snapshot.child("Around-Taxi-Member").child("UserAccount").child(auth.currentUser?.uid.toString()).child("nickName").getValue().toString()
-                        val currentUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
-                            .child("currentNumberPeople").getValue().toString()
-                        val requestUserNumber = snapshot.child("Posting").child(auth.currentUser?.uid.toString())
-                            .child("requestNumberPeople").getValue().toString()
+                        val nickname = snapshot.child("Around-Taxi-Member").child("UserAccount")
+                            .child(auth.currentUser?.uid.toString()).child("nickName").getValue()
+                            .toString()
+                        val currentUserNumber =
+                            snapshot.child("Posting").child(getChatRoomData)
+                                .child("currentNumberPeople").getValue().toString()
+                        val requestUserNumber =
+                            snapshot.child("Posting").child(getChatRoomData)
+                                .child("requestNumberPeople").getValue().toString()
 
                         binding.txtSettingNickname.text = nickname
                         binding.txtOrigin.text = getData?.originName.toString()
