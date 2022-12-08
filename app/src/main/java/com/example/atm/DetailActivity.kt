@@ -51,18 +51,22 @@ class DetailActivity : AppCompatActivity() {
         binding.joinButton.setOnClickListener {
             val currentUser = auth.currentUser
             if (currentUser != null) {
+                val userDataMap = hashMapOf<String, String>()
                 when (postData.currentNumberPeople) {
                     1 -> {
+                        userDataMap.put("member1", userData.nickName)
                         chatDB.collection("${postData.nickname}'s ChatRoom Member")
-                            .document("member1").set(userData.nickName)
+                            .document("Chat Member").update(userDataMap as Map<String, Any>)
                     }
                     2 -> {
+                        userDataMap.put("member2", userData.nickName)
                         chatDB.collection("${postData.nickname}'s ChatRoom Member")
-                            .document("member2").set(userData.nickName)
+                            .document("Chat Member").update(userDataMap as Map<String, Any>)
                     }
                     3 -> {
+                        userDataMap.put("member3", userData.nickName)
                         chatDB.collection("${postData.nickname}'s ChatRoom Member")
-                            .document("member3").set(userData.nickName)
+                            .document("Chat Member").update(userDataMap as Map<String, Any>)
                     }
                     else -> {
 
