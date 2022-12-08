@@ -121,7 +121,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     val intent = Intent(activity, DetailActivity::class.java)
                     intent.putExtra("post", postArrayList[position])
                     intent.putExtra("join", joinArrayList[position])
-                    intent.putExtra("userAccount", userArrayList)
+                    intent.putExtra("userAccount", userArrayList[position-1])
                     startActivity(intent)
                 }
             }
