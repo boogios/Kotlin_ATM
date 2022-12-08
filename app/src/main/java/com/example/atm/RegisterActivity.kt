@@ -120,8 +120,7 @@ class RegisterActivity : AppCompatActivity() {
                             currentNumberPeople = currentNumberPeople,
                             requestNumberPeople = requestNumberPeople,
                             comment = binding.comment.text.toString(),
-                            nickname = nickname,
-                            uid = currentUser.uid
+                            nickname = nickname
                         )
 
                         if (currentUser != null) {

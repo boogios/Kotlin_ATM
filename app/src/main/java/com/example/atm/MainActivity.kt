@@ -31,24 +31,27 @@ class MainActivity : AppCompatActivity() {
                 R.id.chat -> {
                     // FirebaseAuth
                     auth = FirebaseAuth.getInstance()
-                    databaseRef = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
+                    databaseRef = FirebaseDatabase.getInstance().reference
 
                     databaseRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            val nickname = snapshot.child("UserAccount")
+                            val nickname = snapshot.child("Around-Taxi-Member").child("UserAccount")
                                 .child(auth.currentUser?.uid.toString()).child("nickName")
                                 .getValue().toString()
-                            val chatRoom = snapshot.child("UserAccount")
+                            val chatRoom = snapshot.child("Around-Taxi-Member").child("UserAccount")
                                 .child(auth.currentUser?.uid.toString()).child("chatRoom")
                                 .getValue().toString()
-                            val likes = snapshot.child("UserAccount")
+                            val likes = snapshot.child("Around-Taxi-Member").child("UserAccount")
                                 .child(auth.currentUser?.uid.toString()).child("like")
                                 .getValue().toString()
+                            val currentNumberOfPeople = snapshot.child("Posting").child(chatRoom)
+                                .child("currentNumberPeople").getValue().toString()
                             Log.d("Main", nickname + "2")
                             val bundle = Bundle()
                             bundle.putString("nickname", nickname)
                             bundle.putString("chatroom", chatRoom)
                             bundle.putString("likes", likes)
+                            bundle.putString("currentNumberOfPeople", currentNumberOfPeople)
                             replaceChatFragment(bundle)
                         }
 
@@ -70,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout,fragment)
+        fragmentTransaction.replace(R.id.frame_layout, fragment)
         fragmentTransaction.commit()
     }
 
@@ -79,6 +82,6 @@ class MainActivity : AppCompatActivity() {
         destination.arguments = bundle
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, destination)
-            .commit()
+            .commitAllowingStateLoss()
     }
 }

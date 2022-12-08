@@ -48,7 +48,7 @@ class DetailActivity : AppCompatActivity() {
             if (currentUser != null) {
                 databaseRef.child("UserAccount").child(currentUser.uid).child("chatRoom")
                     .setValue(joinData.nickname)
-                postingRef.child(postData.uid).child("currentNumberPeople")
+                postingRef.child(postData.nickname).child("currentNumberPeople")
                     .setValue(postData.currentNumberPeople+1)
                 Toast.makeText(baseContext, "참여하였습니다.", Toast.LENGTH_LONG).show()
                 finish()

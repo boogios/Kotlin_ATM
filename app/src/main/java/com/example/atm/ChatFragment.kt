@@ -37,6 +37,7 @@ class ChatFragment : Fragment() {
     private lateinit var currentUser: String
     private lateinit var chatRoomName: String
     private lateinit var myLikes: String
+    private lateinit var currentNumberOfPeople: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class ChatFragment : Fragment() {
             currentUser = it.getString("nickname").toString()
             chatRoomName = it.getString("chatroom").toString()
             myLikes = it.getString("likes").toString()
+            currentNumberOfPeople = it.getString("currentNumberOfPeople").toString()
         }
     }
 
@@ -107,7 +109,10 @@ class ChatFragment : Fragment() {
                 "likes" to myLikes
             )
 
-            chatDB.collection("${chatRoomName}'s ChatRoom").add(data)
+            chatDB.collection("${chatRoomName}'s ChatRoom").document(
+                LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            ).set(data)
                 .addOnSuccessListener {
                     binding.editTextMessage.text.clear()
                 }
@@ -117,24 +122,13 @@ class ChatFragment : Fragment() {
                 }
         }
 
-
-
         binding.btnLeaveChatRoom.setOnClickListener {
             val currentUser = auth.currentUser
             if (currentUser != null) {
                 userAccountDatabaseReference.child(currentUser.uid).child("chatRoom")
                     .setValue("None")
-                postingDatabaseReference.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val currentPeople = snapshot.child(chatRoomName).child("currentNumberPeople").getValue().toString()
-                        postingDatabaseReference.child(chatRoomName).child("currentNumberPeople")
-                            .setValue(currentPeople.toInt() - 1)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-
-                    }
-                })
+                postingDatabaseReference.child(chatRoomName).child("currentNumberPeople")
+                    .setValue(currentNumberOfPeople.toInt() - 1)
             }
         }
 
