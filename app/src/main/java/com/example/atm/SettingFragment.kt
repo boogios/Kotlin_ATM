@@ -24,6 +24,7 @@ class SettingFragment : Fragment() {
     private lateinit var joinArrayList: ArrayList<Join>
     private lateinit var chatRoomName: String
     private lateinit var currentNumberOfPeople: String
+    private lateinit var myLikes: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,7 @@ class SettingFragment : Fragment() {
         arguments?.let {
             chatRoomName = it.getString("chatroom").toString()
             currentNumberOfPeople = it.getString("currentNumberOfPeople").toString()
+            myLikes = it.getString("likes").toString()
         }
     }
 
@@ -54,6 +56,8 @@ class SettingFragment : Fragment() {
 
         binding.layoutJoinedInfo.isInvisible = false
         binding.txtNotYetJoined.isInvisible = false
+
+        binding.settingHeartText.setText("내 좋아요 수: "+myLikes)
 
         binding.btnLeaveChatRoomInSetting.setOnClickListener {
             val currentUser = auth.currentUser
