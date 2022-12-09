@@ -1,5 +1,8 @@
 package com.example.atm
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.atm.databinding.FragmentChatBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.time.LocalDateTime
@@ -38,6 +45,8 @@ class ChatFragment : Fragment() {
     private lateinit var chatRoomName: String
     private lateinit var myLikes: String
     private lateinit var currentNumberOfPeople: String
+
+    private var mContext: Context? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,14 +134,94 @@ class ChatFragment : Fragment() {
         binding.btnLeaveChatRoom.setOnClickListener {
             val currentUser = auth.currentUser
             if (currentUser != null) {
+                var chatDB =
+                    FirebaseFirestore.getInstance().collection("${chatRoomName}'s ChatRoom Member")
+                        .document("Chat Member")
+                chatDB.get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            Log.d("chat", "DocumentSnapshot data: ${document.data}")
+                            // D/chat: DocumentSnapshot data: {member2=ch2, PostOwner=tkddn, member3=, member1=ch1}
+                            showDialog(document)
+
+                        } else {
+                            Log.d("chat", "No such document")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("chat", "get failed with ", exception)
+                    }
                 userAccountDatabaseReference.child(currentUser.uid).child("chatRoom")
                     .setValue("None")
                 postingDatabaseReference.child(chatRoomName).child("currentNumberPeople")
                     .setValue(currentNumberOfPeople.toInt() - 1)
+
             }
         }
 
         return view
+    }
+
+    private fun showDialog(document: DocumentSnapshot) {
+        var chatMemberList =
+            document.data!!.values.filter { it != "" }.map { it.toString() }.toTypedArray()
+        Log.d("chat", "DocumentSnapshot data: $chatMemberList")
+        var itemList = chatMemberList
+        var checkedItems = arrayListOf<String>()
+        val builder = AlertDialog.Builder(mContext)
+
+        builder.setTitle("좋아요❤️를 누르고 싶은 상대를 클릭하세요!")
+            .setMultiChoiceItems(
+                itemList,
+                null,
+                object : DialogInterface.OnMultiChoiceClickListener {
+                    override fun onClick(
+                        dialog: DialogInterface,
+                        pos: Int,
+                        isChecked: Boolean
+                    ) {
+                        if (isChecked) {
+                            checkedItems.add(itemList[pos])
+                        } else if (checkedItems.contains(itemList[pos])) {
+                            checkedItems.remove(itemList[pos])
+                        }
+                    }
+                })
+            .setPositiveButton(
+                "확인",
+                object : DialogInterface.OnClickListener {
+                    override fun onClick(p0: DialogInterface?, p1: Int) {
+                        Log.d("chat", "checkedItem: ${checkedItems}")
+                        userAccountDatabaseReference.addListenerForSingleValueEvent(
+                            object : ValueEventListener {
+                                override fun onDataChange(userUid: DataSnapshot) {
+                                    for (snapshot in userUid.children) {
+                                        val userInfo: HashMap<String, Any> =
+                                            snapshot.value as HashMap<String, Any>
+                                        Log.d(
+                                            "chat",
+                                            "key: ${snapshot.key.toString()}, value: ${userInfo}"
+                                        )
+                                        val userNickname = userInfo.get("nickName")!!.toString()
+                                        if (checkedItems.contains(userNickname)) {
+                                            val userLike = userInfo.get("like")!!.toString().toInt()
+                                            Log.d("chat", "userLike: ${userLike}")
+                                            userAccountDatabaseReference.child(snapshot.key.toString())
+                                                .child("like").setValue(userLike + 1)
+                                        }
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            }
+                        )
+                    }
+                })
+
+        builder.show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -142,5 +231,10 @@ class ChatFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
     }
 }
