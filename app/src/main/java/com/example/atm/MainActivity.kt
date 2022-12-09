@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     })
                 }
+
                 R.id.settings -> {
                     auth = FirebaseAuth.getInstance()
                     databaseRef = FirebaseDatabase.getInstance().reference
@@ -70,9 +71,13 @@ class MainActivity : AppCompatActivity() {
                                 .getValue().toString()
                             val currentNumberOfPeople = snapshot.child("Posting").child(chatRoom)
                                 .child("currentNumberPeople").getValue().toString()
+                            val likes = snapshot.child("Around-Taxi-Member").child("UserAccount")
+                                .child(auth.currentUser?.uid.toString()).child("like")
+                                .getValue().toString()
                             val bundle = Bundle()
                             bundle.putString("chatroom", chatRoom)
                             bundle.putString("currentNumberOfPeople", currentNumberOfPeople)
+                            bundle.putString("likes", likes)
                             replaceSettingFragment(bundle)
                         }
 
@@ -81,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     })
                 }
+
                 else -> {
 
                 }
