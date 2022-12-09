@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.atm.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -25,6 +26,9 @@ class RegisterActivity : AppCompatActivity() {
     // Firebase Realtime DB
     private lateinit var databaseRef: DatabaseReference
 
+    // Firebase Firestore 초기화
+    private var chatDB = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -33,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // FirebaseAuth
         auth = FirebaseAuth.getInstance()
-        databaseRef = FirebaseDatabase.getInstance().getReference()
+        databaseRef = FirebaseDatabase.getInstance().reference
 
         // launcher
         originLauncher =
@@ -104,6 +108,15 @@ class RegisterActivity : AppCompatActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         nickname = snapshot.child("nickName").getValue().toString()
 
+                        val memberData = hashMapOf(
+                            "PostOwner" to nickname,
+                            "member1" to "",
+                            "member2" to "",
+                            "member3" to "",
+                        )
+
+                        chatDB.collection("${nickname}'s ChatRoom Member").document("Chat Member").set(memberData)
+
                         databaseRef.child("Around-Taxi-Member").child("UserAccount")
                             .child(currentUser.uid).child("chatRoom")
                             .setValue(nickname)
@@ -126,6 +139,7 @@ class RegisterActivity : AppCompatActivity() {
                         if (currentUser != null) {
                             databaseRef.child("Posting").child(myPost.nickname).setValue(myPost)
                             Toast.makeText(baseContext, "모집글이 등록 되었습니다.", Toast.LENGTH_LONG).show()
+
                             Log.d("registerSearch", "$myPost")
                             finish()
                         }

@@ -11,15 +11,21 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.atm.databinding.FragmentHomeBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
     private lateinit var dbref: DatabaseReference
+    private lateinit var userDBref: DatabaseReference
+
+    // FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var joinArrayList: ArrayList<Join>
     private lateinit var postArrayList: ArrayList<Post>
+    private lateinit var userArrayList: ArrayList<UserAccount>
 
     private lateinit var originLauncher: ActivityResultLauncher<Intent>
     private lateinit var destinationLauncher: ActivityResultLauncher<Intent>
@@ -115,6 +121,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     val intent = Intent(activity, DetailActivity::class.java)
                     intent.putExtra("post", postArrayList[position])
                     intent.putExtra("join", joinArrayList[position])
+                    intent.putExtra("userAccount", userArrayList[position-1])
                     startActivity(intent)
                 }
             }
@@ -125,9 +132,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun getUserData() {
         postArrayList = arrayListOf<Post>()
         joinArrayList = arrayListOf<Join>()
+        userArrayList = arrayListOf<UserAccount>()
+
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
 
         dbref = FirebaseDatabase.getInstance().getReference("Posting")
+        if (currentUser != null) {
+            userDBref = FirebaseDatabase.getInstance().getReference("Around-Taxi-Member")
+                .child("UserAccount").child(currentUser.uid)
+        }
 
+        userDBref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    var userData = snapshot.getValue(UserAccount::class.java)
+                    if (userData != null) {
+                        userArrayList.add(userData)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
         dbref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
