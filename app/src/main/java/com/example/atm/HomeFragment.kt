@@ -121,7 +121,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     val intent = Intent(activity, DetailActivity::class.java)
                     intent.putExtra("post", postArrayList[position])
                     intent.putExtra("join", joinArrayList[position])
-                    intent.putExtra("userAccount", userArrayList[position-1])
+                    intent.putExtra("userAccount", userArrayList[position])
                     startActivity(intent)
                 }
             }
@@ -149,6 +149,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     var userData = snapshot.getValue(UserAccount::class.java)
                     if (userData != null) {
                         userArrayList.add(userData)
+                        Log.d("user", "userArrayList: $userArrayList")
                     }
                 }
             }
