@@ -1,5 +1,6 @@
 package com.example.atm
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ class SettingFragment : Fragment() {
     private lateinit var databaseRef: DatabaseReference
 
     private lateinit var joinArrayList: ArrayList<Join>
+    private lateinit var nickName: String
     private lateinit var chatRoomName: String
     private lateinit var currentNumberOfPeople: String
     private lateinit var myLikes: String
@@ -30,6 +32,7 @@ class SettingFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
+            nickName = it.getString("nickname").toString()
             chatRoomName = it.getString("chatroom").toString()
             currentNumberOfPeople = it.getString("currentNumberOfPeople").toString()
             myLikes = it.getString("likes").toString()
@@ -46,6 +49,7 @@ class SettingFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -57,7 +61,8 @@ class SettingFragment : Fragment() {
         binding.layoutJoinedInfo.isInvisible = false
         binding.txtNotYetJoined.isInvisible = false
 
-        binding.settingHeartText.setText("내 좋아요 수: "+myLikes)
+        binding.settingName.text = "Welcome, $nickName!"
+        binding.settingHeartText.setText("내 좋아요 수: $myLikes")
 
         binding.btnLeaveChatRoomInSetting.setOnClickListener {
             val currentUser = auth.currentUser
