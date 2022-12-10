@@ -13,6 +13,7 @@
         android:id="@+id/txt_notYetJoined"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
+        android:layout_marginTop="220dp"
         android:text="Not yet joined"
         app:layout_constraintBottom_toTopOf="@+id/btn_leaveChatRoomInSetting"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +24,7 @@
         android:id="@+id/layout_joinedInfo"
         android:layout_width="match_parent"
         android:layout_height="500px"
+        android:layout_marginTop="260dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -116,33 +118,82 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_joinedInfo" />
 
     <Button
-      android:id="@+id/btn_logout"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="320dp"
-      android:text="Log Out"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/btn_leaveChatRoomInSetting"/>
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Log Out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_leaveChatRoomInSetting" />
+
     <TextView
-      android:id="@+id/settingHeartText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="100dp"
-      android:layout_marginStart="36dp"
-      android:text="TextView"
-      android:textSize="34sp"
-      app:layout_constraintStart_toEndOf="@+id/settingHeartImage"
-      app:layout_constraintTop_toBottomOf="@+id/btn_leaveChatRoomInSetting"/>
+        android:id="@+id/settingHeartText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="TextView"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/settingHeartImage"
+        app:layout_constraintStart_toEndOf="@+id/settingHeartImage"
+        app:layout_constraintTop_toTopOf="@+id/settingHeartImage" />
+
     <ImageView
-      android:id="@+id/settingHeartImage"
-      android:layout_width="47dp"
-      android:layout_height="49dp"
-      android:layout_marginTop="100dp"
-      android:layout_marginStart="24dp"
-      android:src="@drawable/heart"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/btn_leaveChatRoomInSetting"/>
+        android:id="@+id/settingHeartImage"
+        android:layout_width="47dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/heart"
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="My Page"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Joined Information"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/layout_joinedInfo"
+        app:layout_constraintStart_toStartOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/settingName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="textView"
+        android:textSize="23dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="My Like"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/settingName"
+        app:layout_constraintTop_toBottomOf="@+id/settingName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

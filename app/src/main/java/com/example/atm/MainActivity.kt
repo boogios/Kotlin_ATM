@@ -66,6 +66,9 @@ class MainActivity : AppCompatActivity() {
 
                     databaseRef.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
+                            val nickname = snapshot.child("Around-Taxi-Member").child("UserAccount")
+                                .child(auth.currentUser?.uid.toString()).child("nickName")
+                                .getValue().toString()
                             val chatRoom = snapshot.child("Around-Taxi-Member").child("UserAccount")
                                 .child(auth.currentUser?.uid.toString()).child("chatRoom")
                                 .getValue().toString()
@@ -75,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                                 .child(auth.currentUser?.uid.toString()).child("like")
                                 .getValue().toString()
                             val bundle = Bundle()
+                            bundle.putString("nickname", nickname)
                             bundle.putString("chatroom", chatRoom)
                             bundle.putString("currentNumberOfPeople", currentNumberOfPeople)
                             bundle.putString("likes", likes)
