@@ -40,9 +40,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:text="시간"
-            app:layout_constraintBottom_toBottomOf="@+id/chatMessage"
+            app:layout_constraintBottom_toBottomOf="@+id/chatLikes"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/chatMessage" />
+            app:layout_constraintTop_toTopOf="@+id/chatLikes" />
 
         <TextView
             android:id="@+id/chatLikes"
